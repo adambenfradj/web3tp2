@@ -1,248 +1,398 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Récupérer le canvas
   const canvas = document.getElementById("zdog-canvas");
+  
+  // Vérifier si le canvas et Zdog sont disponibles
   if (!canvas || !window.Zdog) return;
 
+  // Extraire les composants Zdog
   const { Illustration, Anchor, Shape, Ellipse } = Zdog;
+
+  // ============================================
+  // CRÉATION DE L'ILLUSTRATION
+  // ============================================
 
   const illo = new Illustration({
     element: canvas,
-    dragRotate: true,
-    resize: "fit"
+    dragRotate: true,  // Permettre la rotation par glissement
+    resize: true       // Adapter à la taille
   });
 
-  // Anchor principal du logo
+  // Point d'ancrage principal pour le logo
   const logoAnchor = new Anchor({
     addTo: illo,
-    translate: { y: 4 },   // légèrement vers le bas pour éviter le clipping haut/bas
+    translate: { y: 0 },
     scale: 1
   });
 
-  let logoScale = 1.3;      // scale actuel
-  let targetScale = 1.3;    // scale vers lequel on anime
+  // Variables d'animation
+  let logoScale = 1.3;
+  let targetScale = 1.3;
+  let autoRotate = true;
 
+  // ============================================
+  // FONCTION DE NETTOYAGE
+  // ============================================
+
+  // Vider les enfants du logo
   function clearLogo() {
     logoAnchor.children = [];
   }
 
-  // ================== LOGOS SIMPLES PAR PAYS ==================
+  // ============================================
+  // LOGO TUNISIE - Croissant et Étoile
+  // ============================================
 
   function createTunisiaLogo() {
     clearLogo();
 
-    // disque principal
+    // Anneau extérieur
     new Ellipse({
       addTo: logoAnchor,
-      diameter: 90,
-      stroke: 10,
+      diameter: 85,
+      stroke: 8,
       color: "#00ff6a"
     });
 
-    // croissant simple
+    // Anneau décoratif intérieur
     new Ellipse({
       addTo: logoAnchor,
-      diameter: 46,
-      quarters: 2,
-      stroke: 8,
-      color: "#00ff6a",
-      translate: { x: 7 }
+      diameter: 70,
+      stroke: 2,
+      color: "#6eea8c"
     });
 
-    // petite étoile
+    // Croissant de lune
+    new Ellipse({
+      addTo: logoAnchor,
+      diameter: 40,
+      quarters: 2,  // Demi-cercle
+      stroke: 10,
+      color: "#00ff6a",
+      translate: { x: 8 },
+      rotate: { z: Math.PI * 0.1 }
+    });
+
+    // Étoile à 5 branches
     new Shape({
       addTo: logoAnchor,
       path: [
-        { x: 0,  y: -10 },
-        { x: 4,  y: 0 },
-        { x: 12, y: 0 },
-        { x: 5,  y: 6 },
-        { x: 8,  y: 15 },
-        { x: 0,  y: 9 },
-        { x: -8, y: 15 },
-        { x: -5, y: 6 },
-        { x: -12,y: 0 },
-        { x: -4, y: 0 }
+        { x: 0, y: -12 },
+        { x: 3, y: -4 },
+        { x: 11, y: -4 },
+        { x: 5, y: 2 },
+        { x: 7, y: 10 },
+        { x: 0, y: 5 },
+        { x: -7, y: 10 },
+        { x: -5, y: 2 },
+        { x: -11, y: -4 },
+        { x: -3, y: -4 }
       ],
       closed: true,
-      stroke: 3,
+      stroke: 4,
+      fill: true,
       color: "#6eea8c",
-      translate: { x: -12, y: 0 }
+      translate: { x: -10, y: 0 }
     });
   }
 
-  // 02 – Maroc : étoile simple dans un cercle
+  // ============================================
+  // LOGO MAROC - Étoile dans un Cercle
+  // ============================================
+
   function createMoroccoLogo() {
     clearLogo();
 
-    // cercle
-    new Ellipse({
+    // Cadre hexagonal extérieur
+    new Shape({
       addTo: logoAnchor,
-      diameter: 80,
+      path: [
+        { x: 0, y: -42 },
+        { x: 36, y: -21 },
+        { x: 36, y: 21 },
+        { x: 0, y: 42 },
+        { x: -36, y: 21 },
+        { x: -36, y: -21 }
+      ],
+      closed: true,
       stroke: 6,
       color: "#00ff6a"
     });
 
-    // étoile
+    // Cercle intérieur
+    new Ellipse({
+      addTo: logoAnchor,
+      diameter: 55,
+      stroke: 3,
+      color: "#6eea8c"
+    });
+
+    // Étoile à 5 branches (pentagramme)
     new Shape({
       addTo: logoAnchor,
       path: [
-        { x: 0,   y: -24 },
-        { x: 7,   y: -4 },
-        { x: 24,  y: -4 },
-        { x: 9,   y: 6 },
-        { x: 14,  y: 22 },
-        { x: 0,   y: 10 },
-        { x: -14, y: 22 },
-        { x: -9,  y: 6 },
-        { x: -24, y: -4 },
-        { x: -7,  y: -4 }
+        { x: 0, y: -26 },
+        { x: 6, y: -8 },
+        { x: 25, y: -8 },
+        { x: 10, y: 4 },
+        { x: 15, y: 22 },
+        { x: 0, y: 11 },
+        { x: -15, y: 22 },
+        { x: -10, y: 4 },
+        { x: -25, y: -8 },
+        { x: -6, y: -8 }
       ],
       closed: true,
-      stroke: 7,
-      color: "#6eea8c"
+      stroke: 5,
+      color: "#00ff6a"
     });
   }
 
-  // 03 – Afghanistan : viseur / crosshair (cible)
+  // ============================================
+  // LOGO AFGHANISTAN - Réticule Militaire
+  // ============================================
+
   function createAfghanistanLogo() {
     clearLogo();
 
-    // cercle externe
+    // Anneau de ciblage extérieur
     new Ellipse({
       addTo: logoAnchor,
       diameter: 80,
-      stroke: 7,
+      stroke: 6,
       color: "#00ff6a"
     });
 
-    // cercle interne
+    // Anneau central
     new Ellipse({
       addTo: logoAnchor,
-      diameter: 32,
-      stroke: 6,
+      diameter: 55,
+      stroke: 3,
       color: "#6eea8c"
     });
 
-    // ligne verticale
-    new Shape({
+    // Cible intérieure (rouge danger)
+    new Ellipse({
       addTo: logoAnchor,
-      path: [
-        { x: 0, y: -40 },
-        { x: 0, y: -26 }
-      ],
-      closed: false,
+      diameter: 25,
       stroke: 5,
-      color: "#00ff6a"
+      color: "#ff2257"
     });
 
+    // Point central
     new Shape({
       addTo: logoAnchor,
-      path: [
-        { x: 0, y: 26 },
-        { x: 0, y: 40 }
-      ],
-      closed: false,
-      stroke: 5,
-      color: "#00ff6a"
+      stroke: 8,
+      color: "#ff2257"
     });
 
-    // ligne horizontale
+    // Propriétés des lignes du réticule
+    const lineProps = {
+      stroke: 4,
+      color: "#00ff6a"
+    };
+
+    // Ligne du haut
     new Shape({
       addTo: logoAnchor,
-      path: [
-        { x: -40, y: 0 },
-        { x: -26, y: 0 }
-      ],
-      closed: false,
-      stroke: 5,
-      color: "#00ff6a"
+      path: [{ x: 0, y: -40 }, { x: 0, y: -18 }],
+      ...lineProps
     });
 
+    // Ligne du bas
     new Shape({
       addTo: logoAnchor,
-      path: [
-        { x: 26, y: 0 },
-        { x: 40, y: 0 }
-      ],
-      closed: false,
-      stroke: 5,
-      color: "#00ff6a"
+      path: [{ x: 0, y: 18 }, { x: 0, y: 40 }],
+      ...lineProps
+    });
+
+    // Ligne de gauche
+    new Shape({
+      addTo: logoAnchor,
+      path: [{ x: -40, y: 0 }, { x: -18, y: 0 }],
+      ...lineProps
+    });
+
+    // Ligne de droite
+    new Shape({
+      addTo: logoAnchor,
+      path: [{ x: 18, y: 0 }, { x: 40, y: 0 }],
+      ...lineProps
+    });
+
+    // Marques aux coins
+    const corners = [
+      { x: -28, y: -28 },
+      { x: 28, y: -28 },
+      { x: -28, y: 28 },
+      { x: 28, y: 28 }
+    ];
+
+    corners.forEach(c => {
+      new Shape({
+        addTo: logoAnchor,
+        stroke: 3,
+        color: "#6eea8c",
+        translate: c
+      });
     });
   }
 
-  // 04 – Québec / Canada : feuille d’érable simplifiée
+  // ============================================
+  // LOGO QUÉBEC/CANADA - Feuille d'Érable
+  // ============================================
+
   function createQuebecLogo() {
     clearLogo();
 
-    new Shape({
-      addTo: logoAnchor,
-      path: [
-        { x: 0,   y: -26 },
-        { x: 6,   y: -14 },
-        { x: 14,  y: -18 },
-        { x: 12,  y: -6 },
-        { x: 24,  y: -2 },
-        { x: 14,  y: 4 },
-        { x: 18,  y: 14 },
-        { x: 8,   y: 10 },
-        { x: 0,   y: 20 },
-        { x: -8,  y: 10 },
-        { x: -18, y: 14 },
-        { x: -14, y: 4 },
-        { x: -24, y: -2 },
-        { x: -12, y: -6 },
-        { x: -14, y: -18 },
-        { x: -6,  y: -14 }
-      ],
-      closed: true,
-      stroke: 7,
-      color: "#00ff6a"
-    });
-
-    // tige
-    new Shape({
-      addTo: logoAnchor,
-      path: [
-        { x: 0, y: 20 },
-        { x: 0, y: 32 }
-      ],
-      closed: false,
-      stroke: 6,
-      color: "#6eea8c"
-    });
-  }
-
-  // 05 – Russie : cercle + étoile
-  function createRussiaLogo() {
-    clearLogo();
-
+    // Cercle extérieur
     new Ellipse({
       addTo: logoAnchor,
       diameter: 80,
-      stroke: 6,
+      stroke: 5,
       color: "#00ff6a"
     });
 
+    // Feuille d'érable stylisée
     new Shape({
       addTo: logoAnchor,
       path: [
-        { x: 0,   y: -24 },
-        { x: 7,   y: -4 },
-        { x: 24,  y: -4 },
-        { x: 9,   y: 6 },
-        { x: 14,  y: 22 },
-        { x: 0,   y: 10 },
-        { x: -14, y: 22 },
-        { x: -9,  y: 6 },
-        { x: -24, y: -4 },
-        { x: -7,  y: -4 }
+        { x: 0, y: -30 },
+        { x: 4, y: -22 },
+        { x: 12, y: -26 },
+        { x: 10, y: -16 },
+        { x: 22, y: -14 },
+        { x: 16, y: -6 },
+        { x: 28, y: -2 },
+        { x: 18, y: 4 },
+        { x: 22, y: 14 },
+        { x: 12, y: 10 },
+        { x: 8, y: 20 },
+        { x: 2, y: 14 },
+        { x: 0, y: 22 },
+        { x: -2, y: 14 },
+        { x: -8, y: 20 },
+        { x: -12, y: 10 },
+        { x: -22, y: 14 },
+        { x: -18, y: 4 },
+        { x: -28, y: -2 },
+        { x: -16, y: -6 },
+        { x: -22, y: -14 },
+        { x: -10, y: -16 },
+        { x: -12, y: -26 },
+        { x: -4, y: -22 }
       ],
       closed: true,
-      stroke: 7,
+      stroke: 5,
+      color: "#00ff6a",
+      fill: false
+    });
+
+    // Tige de la feuille
+    new Shape({
+      addTo: logoAnchor,
+      path: [{ x: 0, y: 22 }, { x: 0, y: 34 }],
+      stroke: 5,
+      color: "#6eea8c"
+    });
+
+    // Touches de fleur de lys (Québec)
+    new Shape({
+      addTo: logoAnchor,
+      path: [
+        { x: 0, y: -38 },
+        { x: -4, y: -44 },
+        { x: 0, y: -42 },
+        { x: 4, y: -44 }
+      ],
+      closed: false,
+      stroke: 3,
       color: "#6eea8c"
     });
   }
 
-  // ================== SWITCH PAR CAMÉRA ==================
+  // ============================================
+  // LOGO RUSSIE - Étoile avec Cercle
+  // ============================================
+
+  function createRussiaLogo() {
+    clearLogo();
+
+    // Double anneau extérieur
+    new Ellipse({
+      addTo: logoAnchor,
+      diameter: 82,
+      stroke: 5,
+      color: "#00ff6a"
+    });
+
+    new Ellipse({
+      addTo: logoAnchor,
+      diameter: 72,
+      stroke: 2,
+      color: "#6eea8c"
+    });
+
+    // Étoile style soviétique
+    new Shape({
+      addTo: logoAnchor,
+      path: [
+        { x: 0, y: -28 },
+        { x: 8, y: -9 },
+        { x: 27, y: -9 },
+        { x: 13, y: 4 },
+        { x: 17, y: 23 },
+        { x: 0, y: 12 },
+        { x: -17, y: 23 },
+        { x: -13, y: 4 },
+        { x: -27, y: -9 },
+        { x: -8, y: -9 }
+      ],
+      closed: true,
+      stroke: 6,
+      color: "#ff2257"
+    });
+
+    // Contour intérieur de l'étoile
+    new Shape({
+      addTo: logoAnchor,
+      path: [
+        { x: 0, y: -18 },
+        { x: 5, y: -6 },
+        { x: 17, y: -6 },
+        { x: 8, y: 2 },
+        { x: 11, y: 14 },
+        { x: 0, y: 8 },
+        { x: -11, y: 14 },
+        { x: -8, y: 2 },
+        { x: -17, y: -6 },
+        { x: -5, y: -6 }
+      ],
+      closed: true,
+      stroke: 2,
+      color: "#00ff6a"
+    });
+
+    // Lignes décoratives autour
+    for (let i = 0; i < 8; i++) {
+      const angle = (i * Math.PI * 2) / 8;
+      const x1 = Math.cos(angle) * 38;
+      const y1 = Math.sin(angle) * 38;
+      const x2 = Math.cos(angle) * 34;
+      const y2 = Math.sin(angle) * 34;
+
+      new Shape({
+        addTo: logoAnchor,
+        path: [{ x: x1, y: y1 }, { x: x2, y: y2 }],
+        stroke: 2,
+        color: "#6eea8c"
+      });
+    }
+  }
+
+  // ============================================
+  // SÉLECTION DU LOGO SELON LA CAMÉRA
+  // ============================================
 
   function setLogoForCamera(camId) {
     switch (camId) {
@@ -266,31 +416,65 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
 
-    // petite transition : on repart petit et on “pop” vers la taille normale
-    logoScale = 0.4;
+    // Animation de pop
+    logoScale = 0.3;
     targetScale = 1.3;
+    
+    // Rotation éclair lors du changement
+    if (window.anime) {
+      anime({
+        targets: logoAnchor.rotate,
+        y: [logoAnchor.rotate.y, logoAnchor.rotate.y + Math.PI * 2],
+        duration: 800,
+        easing: "easeOutQuad"
+      });
+    }
+
     illo.updateRenderGraph();
   }
 
-  // exposé pour vfx.js
+  // ============================================
+  // EXPOSER LA FONCTION GLOBALEMENT
+  // ============================================
+
   window.setHudCountryLogo = setLogoForCamera;
 
-  // logo au démarrage
+  // ============================================
+  // INITIALISATION
+  // ============================================
+
   setLogoForCamera("01");
 
-  // ================== ANIMATION GLOBALE ==================
+  // ============================================
+  // BOUCLE D'ANIMATION
+  // ============================================
 
   function animate() {
-    // easing vers la taille cible
-    logoScale += (targetScale - logoScale) * 0.15;
+    // Transition douce vers l'échelle cible
+    logoScale += (targetScale - logoScale) * 0.12;
     logoAnchor.scale = logoScale;
 
-    // rotation légère en continu
-    logoAnchor.rotate.y += 0.01;
+    // Rotation continue automatique
+    if (autoRotate) {
+      logoAnchor.rotate.y += 0.008;
+    }
+
+    // Légère oscillation
+    logoAnchor.rotate.x = Math.sin(Date.now() * 0.001) * 0.1;
 
     illo.updateRenderGraph();
     requestAnimationFrame(animate);
   }
 
   animate();
+
+  // ============================================
+  // CONTRÔLE PAR INTERACTION
+  // ============================================
+
+  // Pause de la rotation automatique lors du glissement
+  canvas.addEventListener("mousedown", () => { autoRotate = false; });
+  canvas.addEventListener("mouseup", () => { autoRotate = true; });
+  canvas.addEventListener("touchstart", () => { autoRotate = false; });
+  canvas.addEventListener("touchend", () => { autoRotate = true; });
 });
