@@ -10,9 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "animejs": "^4.2.2",
+    "animejs": "^3.2.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "chartjs": "^0.3.24"
+    "chart.js": "^4.4.1",
+    "chartjs": "^0.3.24",
+    "maplibre-gl": "^5.14.0",
+    "tone": "^15.1.22",
+    "zdog": "^1.1.3"
   }
 }
