@@ -5,93 +5,44 @@
   <title>M-GUARD // Surveillance Interface v3.0</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- ============================================
-       POLICES GOOGLE - Orbitron pour le style futuriste
-       Share Tech Mono pour le texte monospace
-       ============================================ -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Roboto+Mono:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap"
-    rel="stylesheet"
-  />
+  <!-- Polices Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Roboto+Mono:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
 
-  <!-- ============================================
-       BOOTSTRAP CSS - Framework pour la mise en page
-       ============================================ -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <!-- CSS npm -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="node_modules/maplibre-gl/dist/maplibre-gl.css" />
 
-  <!-- ============================================
-       BOOTSTRAP ICONS - Icônes vectorielles
-       ============================================ -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-  />
-
-  <!-- ============================================
-       MAPLIBRE CSS - Carte géographique interactive
-       ============================================ -->
-  <link
-    href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
-    rel="stylesheet"
-  />
-
-  <!-- ============================================
-       CSS PERSONNALISÉ - Styles du HUD
-       ============================================ -->
+  <!-- CSS personnalisé -->
   <link rel="stylesheet" href="src/css/styles.css" />
 </head>
 <body>
 
-  <!-- ============================================
-       EFFETS GLOBAUX - Superpositions visuelles
-       ============================================ -->
-  
-  <!-- Lignes de balayage CRT -->
+  <!-- Effets visuels globaux -->
   <div class="global-scanlines"></div>
-  
-  <!-- Bruit/grain vidéo -->
   <div class="global-noise"></div>
-  
-  <!-- Vignettage des bords -->
   <div class="global-vignette"></div>
-  
-  <!-- ============================================
-       PARTICULES FLOTTANTES - Effet d'ambiance
-       ============================================ -->
   <div class="particles-container" id="particles"></div>
 
-  <!-- ============================================
-       CONTENEUR PRINCIPAL DU HUD
-       ============================================ -->
+  <!-- Conteneur principal -->
   <div class="hud-wrapper container-fluid">
     <main class="hud-grid">
 
-      <!-- ================= EN-TÊTE ================= -->
+      <!-- En-tête -->
       <header class="hud-header hud-panel d-flex justify-content-between align-items-center px-4">
-        
-        <!-- Logo et titre à gauche -->
         <div class="d-flex align-items-center gap-3">
-          <!-- Logo MG futuriste -->
           <div class="hud-logo">
             <span class="logo-text">MG</span>
             <div class="logo-pulse"></div>
           </div>
           <div>
-            <!-- Sous-titre avec effet glitch -->
             <p class="hud-kicker mb-0">
               <span class="glitch-text" data-text="M-GUARD">M-GUARD</span>
             </p>
-            <!-- Titre principal avec effet de frappe -->
-            <h1 class="hud-title mb-0">
-              <span class="typing-text">SURVEILLANCE INTERFACE</span>
-            </h1>
+            <h1 class="hud-title mb-0">SURVEILLANCE INTERFACE</h1>
           </div>
         </div>
         
-        <!-- Barres de signal animées -->
         <div class="signal-bars">
           <div class="signal-bar"></div>
           <div class="signal-bar"></div>
@@ -100,63 +51,39 @@
           <div class="signal-bar"></div>
         </div>
         
-        <!-- Informations système à droite -->
         <div class="text-end">
-          <p class="hud-small mb-1">
-            <span class="blink-slow">◆</span> M-GUARD SYSTEM v3.0
-          </p>
-          <p class="hud-small mb-1">
-            CONNEXION:
-            <span class="text-accent-danger pulse-text">NON AUTORISÉE</span>
-          </p>
-          <p class="hud-small mb-0">
-            HEURE:
-            <span id="hud-clock" class="mono-digits">00:00:00</span>
-          </p>
-          <p class="hud-small mb-0">
-            DATE:
-            <span id="hud-date" class="mono-digits">2025.12.06</span>
-          </p>
+          <p class="hud-small mb-1"><span class="blink-slow">◆</span> M-GUARD SYSTEM v3.0</p>
+          <p class="hud-small mb-1">CONNEXION: <span class="text-accent-danger pulse-text">NON AUTORISÉE</span></p>
+          <p class="hud-small mb-0">HEURE: <span id="hud-clock" class="mono-digits">00:00:00</span></p>
+          <p class="hud-small mb-0">DATE: <span id="hud-date" class="mono-digits">2025.12.06</span></p>
         </div>
       </header>
 
-      <!-- ============================================
-           PANNEAU GAUCHE - Caméras, Activité, Dossier
-           ============================================ -->
+      <!-- Panneau gauche -->
       <aside class="hud-left hud-panel p-3">
-        
-        <!-- Titre de section caméras -->
-        <h2 class="hud-section-title">
-          <i class="bi bi-broadcast me-2"></i>CAMÉRAS
-        </h2>
+        <h2 class="hud-section-title"><i class="bi bi-broadcast me-2"></i>CAMÉRAS</h2>
 
-        <!-- Liste des boutons de caméra -->
         <div class="hud-cam-list mb-3">
-          <!-- Caméra 01 - Tunis (active par défaut) -->
           <button class="cam-btn w-100 text-start active" data-cam="01">
             <span class="cam-status online"></span>
             <i class="bi bi-camera-video-fill me-2"></i> CMR-01
             <span class="cam-location">TUNIS</span>
           </button>
-          <!-- Caméra 02 - Casablanca -->
           <button class="cam-btn w-100 text-start" data-cam="02">
             <span class="cam-status online"></span>
             <i class="bi bi-camera-video-fill me-2"></i> CMR-02
             <span class="cam-location">CASABLANCA</span>
           </button>
-          <!-- Caméra 03 - Kabul (avertissement) -->
           <button class="cam-btn w-100 text-start" data-cam="03">
             <span class="cam-status warning"></span>
             <i class="bi bi-camera-video-fill me-2"></i> CMR-03
             <span class="cam-location">KABUL</span>
           </button>
-          <!-- Caméra 04 - Québec -->
           <button class="cam-btn w-100 text-start" data-cam="04">
             <span class="cam-status online"></span>
             <i class="bi bi-camera-video-fill me-2"></i> CMR-04
             <span class="cam-location">QUÉBEC</span>
           </button>
-          <!-- Caméra 05 - Moscow (hors ligne) -->
           <button class="cam-btn w-100 text-start" data-cam="05">
             <span class="cam-status offline"></span>
             <i class="bi bi-camera-video-fill me-2"></i> CMR-05
@@ -164,25 +91,15 @@
           </button>
         </div>
 
-        <!-- Section graphique d'activité -->
-        <h3 class="hud-subsection-title mb-2">
-          <i class="bi bi-activity me-2"></i>ACTIVITÉ
-        </h3>
+        <h3 class="hud-subsection-title mb-2"><i class="bi bi-activity me-2"></i>ACTIVITÉ</h3>
         <div class="hud-chart-wrapper mb-3">
           <canvas id="activityChart" width="300" height="120"></canvas>
         </div>
 
-        <!-- ============================================
-             SECTION DOSSIER AVEC EMPREINTE DIGITALE À GAUCHE
-             ============================================ -->
-        <h3 class="hud-subsection-title mb-1">
-          <i class="bi bi-folder-fill me-2"></i>DOSSIER MISSION
-        </h3>
+        <h3 class="hud-subsection-title mb-1"><i class="bi bi-folder-fill me-2"></i>DOSSIER MISSION</h3>
         <div class="hud-dossier-container">
-          <!-- Empreinte digitale positionnée à gauche -->
           <div class="fingerprint-bg fingerprint-left">
             <svg class="fingerprint-svg" viewBox="0 0 100 100">
-              <!-- Cercles animés de l'empreinte -->
               <circle class="fp-ring" cx="50" cy="50" r="8" />
               <circle class="fp-ring" cx="50" cy="50" r="14" />
               <circle class="fp-ring" cx="50" cy="50" r="20" />
@@ -191,26 +108,20 @@
               <circle class="fp-ring" cx="50" cy="50" r="38" />
               <circle class="fp-ring" cx="50" cy="50" r="44" />
             </svg>
-            <!-- Ligne de scan animée -->
             <div class="scan-line"></div>
           </div>
-          <!-- Contenu du dossier -->
           <div class="hud-dossier" id="dossier-text">
             // [CLASSIFIÉ] SUJET: FOX-01<br />
             // SIGNAUX INTERCEPTÉS ENTRE TUNIS ET NŒUD INCONNU.<br />
             // CONTACT À HAUT RISQUE – CHEF DE CELLULE SUSPECTÉ.
           </div>
-          <!-- Badge de classification -->
           <div class="dossier-classification">
             <span class="classification-badge">TOP SECRET</span>
             <span class="classification-code">TS/SCI//NOFORN</span>
           </div>
         </div>
 
-        <!-- Coordonnées GPS de la cible -->
-        <h3 class="hud-subsection-title mt-3 mb-1">
-          <i class="bi bi-geo-alt-fill me-2"></i>POSITION CIBLE
-        </h3>
+        <h3 class="hud-subsection-title mt-3 mb-1"><i class="bi bi-geo-alt-fill me-2"></i>POSITION CIBLE</h3>
         <div class="hud-gps" id="gps-text">
           <div class="gps-row">
             <span class="gps-label">LAT:</span>
@@ -227,193 +138,95 @@
         </div>
       </aside>
 
-      <!-- ============================================
-           PANNEAU CENTRAL - Flux Vidéo + Cibles
-           ============================================ -->
+      <!-- Panneau central -->
       <section class="hud-center hud-panel p-3">
-        
-        <!-- En-tête avec contrôles de filtre vidéo -->
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <h2 class="hud-section-title mb-0">
-            <i class="bi bi-eye-fill me-2"></i>FLUX EN DIRECT
-          </h2>
-          <!-- Boutons de filtre vidéo -->
+          <h2 class="hud-section-title mb-0"><i class="bi bi-eye-fill me-2"></i>FLUX EN DIRECT</h2>
           <div class="feed-controls">
-            <button class="feed-btn" id="btn-night-vision" title="Vision Nocturne">
-              <i class="bi bi-moon-fill"></i>
-            </button>
-            <button class="feed-btn" id="btn-thermal" title="Thermique">
-              <i class="bi bi-thermometer-half"></i>
-            </button>
-            <button class="feed-btn active" id="btn-normal" title="Normal">
-              <i class="bi bi-camera-fill"></i>
-            </button>
+            <button class="feed-btn" id="btn-night-vision" title="Vision Nocturne"><i class="bi bi-moon-fill"></i></button>
+            <button class="feed-btn" id="btn-thermal" title="Thermique"><i class="bi bi-thermometer-half"></i></button>
+            <button class="feed-btn active" id="btn-normal" title="Normal"><i class="bi bi-camera-fill"></i></button>
           </div>
         </div>
 
-        <!-- Conteneur du flux vidéo -->
         <div class="hud-camera-feed mb-3">
-          <!-- Élément vidéo - charge les fichiers du dossier assets/video -->
-          <video
-            id="live-video"
-            src="assets/video/cam01.mp4"
-            autoplay
-            muted
-            loop
-            playsinline
-          ></video>
-
-          <!-- Superpositions HUD sur la vidéo -->
-          <!-- Indicateur d'enregistrement -->
-          <div class="hud-overlay hud-rec">
-            <span class="rec-dot"></span> REC
-          </div>
-          <!-- Label de la caméra active -->
+          <video id="live-video" src="assets/video/cam01.mp4" autoplay muted loop playsinline></video>
+          <div class="hud-overlay hud-rec"><span class="rec-dot"></span> REC</div>
           <div class="hud-overlay hud-cam-label" id="cam-label">CMR-01</div>
-          <!-- Horodatage en temps réel -->
           <div class="hud-overlay hud-timestamp" id="feed-timestamp">2025.12.06 // 21:45:32</div>
-          
-          <!-- Réticule de visée central -->
           <div class="camera-crosshair">
             <div class="crosshair-h"></div>
             <div class="crosshair-v"></div>
             <div class="crosshair-center"></div>
           </div>
-          
-          <!-- Crochets aux coins du cadre -->
           <div class="corner-bracket top-left"></div>
           <div class="corner-bracket top-right"></div>
           <div class="corner-bracket bottom-left"></div>
           <div class="corner-bracket bottom-right"></div>
-          
-          <!-- Barre de statut en bas -->
           <div class="hud-overlay hud-status">
-            <span class="status-item">
-              <i class="bi bi-activity"></i> MOUVEMENT: <span id="motion-level">FAIBLE</span>
-            </span>
-            <span class="status-item">
-              <i class="bi bi-mic-fill"></i> AUDIO: <span id="audio-status">ON</span>
-            </span>
-            <span class="status-item">
-              <i class="bi bi-shield-fill-x"></i> MASQUE: <span id="mask-status" class="text-accent-danger">DÉCONNECTÉ</span>
-            </span>
+            <span class="status-item"><i class="bi bi-activity"></i> MOUVEMENT: <span id="motion-level">FAIBLE</span></span>
+            <span class="status-item"><i class="bi bi-mic-fill"></i> AUDIO: <span id="audio-status">ON</span></span>
+            <span class="status-item"><i class="bi bi-shield-fill-x"></i> MASQUE: <span id="mask-status" class="text-accent-danger">DÉCONNECTÉ</span></span>
           </div>
         </div>
 
-        <!-- ============================================
-             CARTES DES CIBLES - Plus grandes avec images
-             ============================================ -->
-        <h3 class="hud-subsection-title mb-2">
-          <i class="bi bi-crosshair me-2"></i>CIBLES
-        </h3>
+        <h3 class="hud-subsection-title mb-2"><i class="bi bi-crosshair me-2"></i>CIBLES</h3>
         <div class="hud-targets">
-          <!-- Cible 01 - FOX-01 (active) -->
           <div class="target-card active" data-cam="01">
-            <div class="target-photo" style="background-image:url('assets/img/img01.png');">
-              <div class="target-scan"></div>
-            </div>
+            <div class="target-photo" style="background-image:url('assets/img/img01.png');"><div class="target-scan"></div></div>
             <div class="target-meta">
               <p class="target-code">FOX-01</p>
-              <p class="target-label">
-                <span class="risk-badge high">ÉLEVÉ</span>
-                <span class="status-text">ACTIF</span>
-              </p>
+              <p class="target-label"><span class="risk-badge high">ÉLEVÉ</span><span class="status-text">ACTIF</span></p>
             </div>
-            <div class="target-threat-level">
-              <div class="threat-bar" style="width: 85%;"></div>
-            </div>
+            <div class="target-threat-level"><div class="threat-bar" style="width: 85%;"></div></div>
           </div>
 
-          <!-- Cible 02 - GHOST-02 -->
           <div class="target-card" data-cam="02">
-            <div class="target-photo" style="background-image:url('assets/img/img02.jpeg');">
-              <div class="target-scan"></div>
-            </div>
+            <div class="target-photo" style="background-image:url('assets/img/img02.jpeg');"><div class="target-scan"></div></div>
             <div class="target-meta">
               <p class="target-code">GHOST-02</p>
-              <p class="target-label">
-                <span class="risk-badge medium">MOYEN</span>
-                <span class="status-text">SUIVI</span>
-              </p>
+              <p class="target-label"><span class="risk-badge medium">MOYEN</span><span class="status-text">SUIVI</span></p>
             </div>
-            <div class="target-threat-level">
-              <div class="threat-bar" style="width: 55%;"></div>
-            </div>
+            <div class="target-threat-level"><div class="threat-bar" style="width: 55%;"></div></div>
           </div>
 
-          <!-- Cible 03 - VIPER-03 (critique) -->
           <div class="target-card" data-cam="03">
-            <div class="target-photo" style="background-image:url('assets/img/img03.png');">
-              <div class="target-scan"></div>
-            </div>
+            <div class="target-photo" style="background-image:url('assets/img/img03.png');"><div class="target-scan"></div></div>
             <div class="target-meta">
               <p class="target-code">VIPER-03</p>
-              <p class="target-label">
-                <span class="risk-badge critical">CRITIQUE</span>
-                <span class="status-text">ARMÉ</span>
-              </p>
+              <p class="target-label"><span class="risk-badge critical">CRITIQUE</span><span class="status-text">ARMÉ</span></p>
             </div>
-            <div class="target-threat-level">
-              <div class="threat-bar critical" style="width: 95%;"></div>
-            </div>
+            <div class="target-threat-level"><div class="threat-bar critical" style="width: 95%;"></div></div>
           </div>
 
-          <!-- Cible 04 - LYNX-04 -->
           <div class="target-card" data-cam="04">
-            <div class="target-photo" style="background-image:url('assets/img/img04.png');">
-              <div class="target-scan"></div>
-            </div>
+            <div class="target-photo" style="background-image:url('assets/img/img04.png');"><div class="target-scan"></div></div>
             <div class="target-meta">
               <p class="target-code">LYNX-04</p>
-              <p class="target-label">
-                <span class="risk-badge low">FAIBLE</span>
-                <span class="status-text">SURVEILLÉ</span>
-              </p>
+              <p class="target-label"><span class="risk-badge low">FAIBLE</span><span class="status-text">SURVEILLÉ</span></p>
             </div>
-            <div class="target-threat-level">
-              <div class="threat-bar" style="width: 25%;"></div>
-            </div>
+            <div class="target-threat-level"><div class="threat-bar" style="width: 25%;"></div></div>
           </div>
 
-          <!-- Cible 05 - RAVEN-05 (inconnu) -->
           <div class="target-card" data-cam="05">
-            <div class="target-photo" style="background-image:url('assets/img/img05.jpeg');">
-              <div class="target-scan"></div>
-            </div>
+            <div class="target-photo" style="background-image:url('assets/img/img05.jpeg');"><div class="target-scan"></div></div>
             <div class="target-meta">
               <p class="target-code">RAVEN-05</p>
-              <p class="target-label">
-                <span class="risk-badge unknown">???</span>
-                <span class="status-text">HORS-GRILLE</span>
-              </p>
+              <p class="target-label"><span class="risk-badge unknown">???</span><span class="status-text">HORS-GRILLE</span></p>
             </div>
-            <div class="target-threat-level">
-              <div class="threat-bar unknown" style="width: 50%;"></div>
-            </div>
+            <div class="target-threat-level"><div class="threat-bar unknown" style="width: 50%;"></div></div>
           </div>
         </div>
       </section>
 
-      <!-- ============================================
-           PANNEAU DROIT - Carte, Logs, Emblème
-           ============================================ -->
+      <!-- Panneau droit -->
       <aside class="hud-right hud-panel p-3">
-        
-        <!-- Carte géographique -->
-        <h2 class="hud-section-title">
-          <i class="bi bi-globe me-2"></i>CARTE INSTALLATION
-        </h2>
+        <h2 class="hud-section-title"><i class="bi bi-globe me-2"></i>CARTE INSTALLATION</h2>
         <div id="map" class="hud-map mb-3">
-          <!-- Affichage des coordonnées -->
-          <div class="map-coordinates" id="map-coords">
-            45.5017° N, 73.5673° W
-          </div>
+          <div class="map-coordinates" id="map-coords">45.5017° N, 73.5673° W</div>
         </div>
 
-        <!-- Logs cryptés -->
-        <h3 class="hud-subsection-title mb-2">
-          <i class="bi bi-file-earmark-lock-fill me-2"></i>LOGS CRYPTÉS
-        </h3>
+        <h3 class="hud-subsection-title mb-2"><i class="bi bi-file-earmark-lock-fill me-2"></i>LOGS CRYPTÉS</h3>
         <div class="hud-logs mb-3" id="logs">
           <div class="log-line"><span class="log-time">21:45:01</span> U4uXS0ZSW+f+--TZS7FF+EE76</div>
           <div class="log-line"><span class="log-time">21:45:12</span> FZUNK4ZSJZP6ZSML0O08TA</div>
@@ -421,110 +234,63 @@
           <div class="log-line new"><span class="log-time">21:45:44</span> A1770UQ$TB?SCPA?C64703?</div>
         </div>
 
-        <!-- Emblème 3D ZDog -->
-        <h3 class="hud-subsection-title mb-2">
-          <i class="bi bi-pentagon-fill me-2"></i>EMBLÈME RÉGION
-        </h3>
+        <h3 class="hud-subsection-title mb-2"><i class="bi bi-pentagon-fill me-2"></i>EMBLÈME RÉGION</h3>
         <div class="hud-zdog-wrapper">
           <canvas id="zdog-canvas" width="150" height="150"></canvas>
           <div class="zdog-glow"></div>
         </div>
 
-        <!-- Label du pays -->
         <p class="hud-small text-center mt-2" id="country-label">
-          <span class="country-flag">🇹🇳</span>
-          LOCALISATION: TUNISIE / TUNIS
+          <span class="country-flag">🇹🇳</span> LOCALISATION: TUNISIE / TUNIS
         </p>
         
-        <!-- Indicateur de niveau de menace -->
         <div class="threat-assessment mt-3">
-          <h4 class="hud-subsection-title mb-2">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>NIVEAU MENACE
-          </h4>
+          <h4 class="hud-subsection-title mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>NIVEAU MENACE</h4>
           <div class="threat-meter">
             <div class="threat-fill" id="threat-fill"></div>
             <div class="threat-markers">
-              <span>BAS</span>
-              <span>MOY</span>
-              <span>HAUT</span>
-              <span>CRIT</span>
+              <span>BAS</span><span>MOY</span><span>HAUT</span><span>CRIT</span>
             </div>
           </div>
           <p class="threat-status" id="threat-status">ÉLEVÉ</p>
         </div>
       </aside>
 
-      <!-- ============================================
-           PIED DE PAGE - Boutons de contrôle
-           ============================================ -->
+      <!-- Pied de page -->
       <footer class="hud-footer hud-panel d-flex justify-content-between align-items-center px-4">
-        
-        <!-- Boutons d'action -->
         <div class="d-flex flex-wrap gap-3">
-          <button class="hud-btn" data-sound="switch" data-action="switch">
-            <i class="bi bi-arrow-repeat me-2"></i>CHANGER CAMÉRA
-          </button>
-          <button class="hud-btn" data-sound="reboot" data-action="reboot">
-            <i class="bi bi-power me-2"></i>REDÉMARRER
-          </button>
-          <button class="hud-btn" data-sound="lure" data-action="lure">
-            <i class="bi bi-volume-up-fill me-2"></i>LEURRE AUDIO
-          </button>
-          <button class="hud-btn danger" data-sound="jammer" data-action="jammer">
-            <i class="bi bi-broadcast-pin me-2"></i>BROUILLEUR
-          </button>
+          <button class="hud-btn" data-sound="switch" data-action="switch"><i class="bi bi-arrow-repeat me-2"></i>CHANGER CAMÉRA</button>
+          <button class="hud-btn" data-sound="reboot" data-action="reboot"><i class="bi bi-power me-2"></i>REDÉMARRER</button>
+          <button class="hud-btn" data-sound="lure" data-action="lure"><i class="bi bi-volume-up-fill me-2"></i>LEURRE AUDIO</button>
+          <button class="hud-btn danger" data-sound="jammer" data-action="jammer"><i class="bi bi-broadcast-pin me-2"></i>BROUILLEUR</button>
         </div>
-        
-        <!-- Informations du pied de page -->
         <div class="footer-info text-end">
-          <p class="hud-small mb-0">
-            CANAL: <span class="mono-digits">03</span>
-            <span class="separator">|</span>
-            BUILD: <span class="mono-digits">32M4CC</span>
-          </p>
-          <p class="hud-small mb-0">
-            LIAISON: <span class="uplink-status">ACTIVE</span>
-            <span class="separator">|</span>
-            LATENCE: <span id="latency" class="mono-digits">42ms</span>
-          </p>
+          <p class="hud-small mb-0">CANAL: <span class="mono-digits">03</span> <span class="separator">|</span> BUILD: <span class="mono-digits">32M4CC</span></p>
+          <p class="hud-small mb-0">LIAISON: <span class="uplink-status">ACTIVE</span> <span class="separator">|</span> LATENCE: <span id="latency" class="mono-digits">42ms</span></p>
         </div>
       </footer>
 
     </main>
   </div>
 
-  <!-- ============================================
-       OVERLAY D'ALERTE - Pour reboot, brouilleur, etc.
-       ============================================ -->
+  <!-- Overlay d'alerte -->
   <div class="alert-overlay" id="alert-overlay">
     <div class="alert-content">
       <div class="alert-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
       <div class="alert-text" id="alert-text">REDÉMARRAGE SYSTÈME...</div>
-      <div class="alert-progress">
-        <div class="alert-progress-bar" id="alert-progress"></div>
-      </div>
+      <div class="alert-progress"><div class="alert-progress-bar" id="alert-progress"></div></div>
     </div>
   </div>
 
-  <!-- ============================================
-       BIBLIOTHÈQUES JAVASCRIPT (CDN)
-       ============================================ -->
-  <!-- Bootstrap JS - Composants interactifs -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Anime.js - Animations fluides -->
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-  <!-- Chart.js - Graphiques -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <!-- MapLibre GL - Carte géographique -->
-  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
-  <!-- ZDog - Graphiques 3D pseudo -->
-  <script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js"></script>
-  <!-- Tone.js - Synthèse audio -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.min.js"></script>
+  <!-- Scripts npm -->
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="node_modules/animejs/lib/anime.min.js" onerror="this.src='node_modules/animejs/lib/anime.iife.min.js'"></script>
+  <script src="node_modules/chart.js/dist/chart.umd.js" onerror="this.src='node_modules/chart.js/dist/chart.min.js'"></script>
+  <script src="node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
+  <script src="node_modules/zdog/dist/zdog.dist.min.js" onerror="this.src='node_modules/zdog/dist/zdog.dist.js'"></script>
+  <script src="node_modules/tone/build/Tone.js" onerror="this.src='node_modules/tone/build/Tone.min.js'"></script>
 
-  <!-- ============================================
-       SCRIPTS PERSONNALISÉS
-       ============================================ -->
+  <!-- Scripts personnalisés -->
   <script src="src/js/particles.js"></script>
   <script src="src/js/animejs.js"></script>
   <script src="src/js/chartjs.js"></script>
