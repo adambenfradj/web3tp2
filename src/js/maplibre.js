@@ -1,4 +1,3 @@
-// Carte avec MapLibre
 document.addEventListener("DOMContentLoaded", () => {
   const mapContainer = document.getElementById("map");
   if (!mapContainer || !window.maplibregl) return;

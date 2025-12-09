@@ -1,4 +1,3 @@
-// Graphique d'activité avec Chart.js
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("activityChart");
   if (!canvas) {

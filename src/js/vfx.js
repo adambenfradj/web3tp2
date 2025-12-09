@@ -1,4 +1,3 @@
-// Effets visuels et logique principale
 document.addEventListener("DOMContentLoaded", () => {
 
   // Horloge temps réel

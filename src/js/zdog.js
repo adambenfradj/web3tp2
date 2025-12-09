@@ -1,4 +1,3 @@
-// Emblèmes 3D avec ZDog
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("zdog-canvas");
   if (!canvas) {
