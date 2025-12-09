@@ -1,4 +1,3 @@
-// Animations avec Anime.js
 document.addEventListener("DOMContentLoaded", () => {
   if (!window.anime) return;
 

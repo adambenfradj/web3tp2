@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let autoRotate = true;
 
-  // Vider le logo
+  
   function clearLogo() { 
     logoAnchor.children.forEach(child => child.remove());
     logoAnchor.children = []; 
