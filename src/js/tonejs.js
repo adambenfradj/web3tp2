@@ -1,13 +1,23 @@
-document.addEventListener("DOMContentLoaded", () => {
-  if (!window.Tone) return;
+// Sons avec Tone.js
+// Liste des sons disponibles:
+// - glitch: Changement de caméra (bruit + notes graves)
+// - sonar: Ping radar automatique toutes les 12 sec
+// - click: Boutons de filtre vidéo
+// - targetLock: Clic sur une carte de cible
+// - switch: Bouton "Changer caméra"
+// - reboot: Bouton "Redémarrer"
+// - lure: Bouton "Leurre audio"
+// - jammer: Bouton "Brouilleur"
 
-  // Audio activé ou non
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof Tone === "undefined") {
+    console.log("Tone.js non chargé");
+    return;
+  }
+
   let audioOK = false;
 
-  // ============================================
-  // SYNTHÉTISEURS
-  // ============================================
-
+  // Synthétiseurs
   const synth = new Tone.Synth({
     oscillator: { type: "square" },
     envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.2 }
@@ -34,9 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     harmonicity: 3,
     modulationIndex: 10,
     oscillator: { type: "sine" },
-    envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 0.5 },
-    modulation: { type: "square" },
-    modulationEnvelope: { attack: 0.2, decay: 0.01, sustain: 1, release: 0.5 }
+    envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 0.5 }
   }).toDestination();
   fm.volume.value = -6;
 
@@ -48,30 +56,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }).toDestination();
   membrane.volume.value = -10;
 
-  // ============================================
-  // ACTIVER L'AUDIO AU PREMIER CLIC
-  // ============================================
-
+  // Activer audio au premier clic
   async function activerAudio() {
     if (audioOK) return;
     try {
       await Tone.start();
       audioOK = true;
-      console.log("✅ Audio activé!");
+      console.log("🔊 Audio Tone.js activé");
     } catch (e) {
       console.log("Erreur audio:", e);
     }
   }
 
-  // Activer au premier clic n'importe où
+  // Écouter les clics pour activer l'audio
   document.body.addEventListener("click", activerAudio);
   document.body.addEventListener("touchstart", activerAudio);
 
-  // ============================================
-  // SONS
-  // ============================================
-
-  // Son de GLITCH (changement de caméra)
+  // GLITCH - Changement de caméra
   function sonGlitch() {
     if (!audioOK) return;
     noise.triggerAttackRelease("16n");
@@ -81,40 +82,39 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => metal.triggerAttackRelease("32n"), 100);
   }
 
-  // Son de SONAR (ping radar)
+  // SONAR - Ping radar
   function sonSonar() {
     if (!audioOK) return;
     fm.triggerAttackRelease("C4", "8n");
     setTimeout(() => {
       fm.volume.value = -12;
       fm.triggerAttackRelease("C4", "16n");
-      fm.volume.value = -6;
+      setTimeout(() => { fm.volume.value = -6; }, 200);
     }, 300);
   }
 
-  // Son de CLIC
-  function sonClic() {
+  // CLICK - Boutons filtre
+  function sonClick() {
     if (!audioOK) return;
     synth.triggerAttackRelease("G5", "64n");
   }
 
-  // Son de VERROUILLAGE CIBLE
-  function sonTarget() {
+  // TARGET LOCK - Clic sur cible
+  function sonTargetLock() {
     if (!audioOK) return;
     fm.triggerAttackRelease("E4", "16n");
     setTimeout(() => fm.triggerAttackRelease("E4", "16n"), 120);
     setTimeout(() => fm.triggerAttackRelease("A4", "8n"), 240);
   }
 
-  // Son de BROUILLEUR
-  function sonJammer() {
+  // SWITCH - Bouton changer caméra
+  function sonSwitch() {
     if (!audioOK) return;
-    noise.triggerAttackRelease("4n");
-    metal.triggerAttackRelease("8n");
-    setTimeout(() => noise.triggerAttackRelease("8n"), 200);
+    synth.triggerAttackRelease("C5", "32n");
+    setTimeout(() => synth.triggerAttackRelease("E5", "32n"), 60);
   }
 
-  // Son de REBOOT
+  // REBOOT - Bouton redémarrer
   function sonReboot() {
     if (!audioOK) return;
     membrane.triggerAttackRelease("C2", "4n");
@@ -123,101 +123,42 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => synth.triggerAttackRelease("C4", "4n"), 500);
   }
 
-  // Son de LEURRE
+  // LURE - Bouton leurre audio
   function sonLure() {
     if (!audioOK) return;
-    ["C4", "E4", "G4", "C5"].forEach((note, i) => {
+    const notes = ["C4", "E4", "G4", "C5"];
+    notes.forEach((note, i) => {
       setTimeout(() => synth.triggerAttackRelease(note, "16n"), i * 100);
     });
   }
 
-  // Son de SWITCH
-  function sonSwitch() {
+  // JAMMER - Bouton brouilleur
+  function sonJammer() {
     if (!audioOK) return;
-    synth.triggerAttackRelease("C5", "32n");
-    setTimeout(() => synth.triggerAttackRelease("E5", "32n"), 60);
+    noise.triggerAttackRelease("4n");
+    metal.triggerAttackRelease("8n");
+    setTimeout(() => noise.triggerAttackRelease("8n"), 200);
   }
 
-  // Son de DATA
-  function sonData() {
-    if (!audioOK) return;
-    for (let i = 0; i < 5; i++) {
-      setTimeout(() => {
-        synth.triggerAttackRelease(i % 2 === 0 ? "C5" : "G5", "64n");
-      }, i * 50);
-    }
-  }
-
-  // ============================================
-  // ATTACHER AUX ÉLÉMENTS
-  // ============================================
-
-  // Boutons caméra - son de glitch
-  document.querySelectorAll(".cam-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activerAudio();
-      sonGlitch();
-    });
-  });
-
-  // Cartes cibles - son de verrouillage
-  document.querySelectorAll(".target-card").forEach(card => {
-    card.addEventListener("click", () => {
-      activerAudio();
-      sonTarget();
-    });
-  });
-
-  // Boutons de filtre vidéo - son de clic
-  document.querySelectorAll(".feed-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activerAudio();
-      sonClic();
-    });
-  });
-
-  // Boutons du footer
-  document.querySelectorAll(".hud-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activerAudio();
-      const action = btn.dataset.action;
-      
-      if (action === "switch") sonSwitch();
-      else if (action === "reboot") sonReboot();
-      else if (action === "lure") sonLure();
-      else if (action === "jammer") sonJammer();
-    });
-  });
-
-  // ============================================
-  // SONS D'AMBIANCE AUTOMATIQUES
-  // ============================================
-
-  // Sonar périodique
+  // Sonar automatique toutes les 12 secondes
   setInterval(() => {
     if (audioOK) sonSonar();
   }, 12000);
 
-  // Data périodique
-  setInterval(() => {
-    if (audioOK && Math.random() > 0.5) sonData();
-  }, 18000);
-
-  // ============================================
-  // EXPOSER GLOBALEMENT
-  // ============================================
-
+  // Exposer globalement
   window.playHudSound = (type) => {
-    activerAudio();
-    if (type === "glitch") sonGlitch();
-    else if (type === "sonar") sonSonar();
-    else if (type === "click") sonClic();
-    else if (type === "targetLock") sonTarget();
-    else if (type === "jammer") sonJammer();
-    else if (type === "reboot") sonReboot();
-    else if (type === "lure") sonLure();
-    else if (type === "switch") sonSwitch();
-    else if (type === "data") sonData();
+    switch (type) {
+      case "glitch": sonGlitch(); break;
+      case "sonar": sonSonar(); break;
+      case "click": sonClick(); break;
+      case "targetLock": sonTargetLock(); break;
+      case "switch": sonSwitch(); break;
+      case "reboot": sonReboot(); break;
+      case "lure": sonLure(); break;
+      case "jammer": sonJammer(); break;
+      default: console.log("Son inconnu:", type);
+    }
   };
 
+  console.log("Tone.js initialisé - Clique pour activer les sons");
 });
