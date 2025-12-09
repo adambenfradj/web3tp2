@@ -1,74 +1,44 @@
+/* Variables */
 :root {
-  /* Couleurs de fond */
   --bg-main: #020304;
   --bg-panel: #050908;
   --border-panel: #0f1a15;
-  
-  /* Couleurs d'accent */
-  --accent: #00ff6a;           /* Vert principal */
-  --accent-soft: #6eea8c;      /* Vert doux */
+  --accent: #00ff6a;
+  --accent-soft: #6eea8c;
   --accent-glow: rgba(0, 255, 106, 0.5);
-  --accent-danger: #ff2257;    /* Rouge danger */
-  --accent-warning: #ffaa00;   /* Orange avertissement */
-  --accent-unknown: #aa00ff;   /* Violet inconnu */
-  
-  /* Couleurs de texte */
+  --accent-danger: #ff2257;
+  --accent-warning: #ffaa00;
+  --accent-unknown: #aa00ff;
   --text-main: #e5ffe9;
   --text-secondary: #6eea8c;
-  
-  /* Bordures et espacements */
   --radius-panel: 14px;
-  
-  /* Polices de caractères */
   --font-mono: "Share Tech Mono", "Roboto Mono", monospace;
   --font-display: "Orbitron", sans-serif;
 }
 
-/* Reset box-sizing pour tous les éléments */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-/* ============================================
-   2. EFFETS GLOBAUX - Corps et superpositions
-   ============================================ */
-
-/* Corps principal - PAS DE SCROLL */
 body {
   margin: 0;
   font-family: var(--font-mono);
   background: radial-gradient(ellipse at top center, #07140d 0%, #020304 50%, #000 100%);
   color: var(--text-main);
-  /* Hauteur fixe de la fenêtre - empêche le scroll */
   height: 100vh;
   overflow: hidden;
   position: relative;
 }
 
-/* Lignes de balayage CRT - effet rétro */
+/* Effets globaux */
 .global-scanlines {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, 0.15) 2px,
-    rgba(0, 0, 0, 0.15) 4px
-  );
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
   animation: scanlineMove 8s linear infinite;
 }
+@keyframes scanlineMove { 0% { transform: translateY(0); } 100% { transform: translateY(4px); } }
 
-@keyframes scanlineMove {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(4px); }
-}
-
-/* Bruit/grain vidéo - effet analogique */
 .global-noise {
   position: fixed;
   inset: 0;
@@ -78,7 +48,6 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   animation: noiseAnim 0.5s steps(10) infinite;
 }
-
 @keyframes noiseAnim {
   0%, 100% { transform: translate(0, 0); }
   10% { transform: translate(-1%, -1%); }
@@ -92,16 +61,14 @@ body {
   90% { transform: translate(1%, 1%); }
 }
 
-/* Vignettage des bords - effet cinématique */
 .global-vignette {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9997;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
 }
 
-/* Conteneur des particules flottantes */
 .particles-container {
   position: fixed;
   inset: 0;
@@ -110,7 +77,6 @@ body {
   overflow: hidden;
 }
 
-/* Style des particules individuelles */
 .particle {
   position: absolute;
   width: 2px;
@@ -121,11 +87,7 @@ body {
   box-shadow: 0 0 6px var(--accent-glow);
 }
 
-/* ============================================
-   3. GRILLE ET PANNEAUX HUD
-   ============================================ */
-
-/* Conteneur principal - remplit la fenêtre */
+/* Grille */
 .hud-wrapper {
   padding: 0.5rem;
   position: relative;
@@ -134,89 +96,45 @@ body {
   overflow: hidden;
 }
 
-/* Grille CSS principale - 3 colonnes, 3 rangées */
 .hud-grid {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    "header header header"
-    "left   center right"
-    "footer footer footer";
+  grid-template-areas: "header header header" "left center right" "footer footer footer";
   height: 100%;
   max-height: 100vh;
 }
 
-/* Style de base pour tous les panneaux */
 .hud-panel {
-  background: 
-    radial-gradient(ellipse at top left, rgba(0, 255, 106, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at bottom right, rgba(0, 255, 106, 0.02) 0%, transparent 40%),
-    linear-gradient(135deg, #07110c 0%, #050908 50%, #020304 100%);
+  background: radial-gradient(ellipse at top left, rgba(0,255,106,0.03) 0%, transparent 50%), radial-gradient(circle at bottom right, rgba(0,255,106,0.02) 0%, transparent 40%), linear-gradient(135deg, #07110c 0%, #050908 50%, #020304 100%);
   border-radius: var(--radius-panel);
   border: 1px solid var(--border-panel);
-  box-shadow:
-    0 0 20px rgba(0, 255, 106, 0.15),
-    0 0 60px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(0, 255, 106, 0.1);
+  box-shadow: 0 0 20px rgba(0,255,106,0.15), 0 0 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(0,255,106,0.1);
   position: relative;
   overflow: hidden;
 }
 
-/* Ligne lumineuse en haut de chaque panneau */
 .hud-panel::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   opacity: 0.5;
 }
 
-/* Attribution des zones de grille */
 .hud-header { grid-area: header; padding: 0.5rem 1rem; }
-.hud-left { 
-  grid-area: left; 
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.hud-center { 
-  grid-area: center;
-  display: flex;
-  flex-direction: column;
-}
-.hud-right { 
-  grid-area: right;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+.hud-left { grid-area: left; overflow-y: auto; overflow-x: hidden; }
+.hud-center { grid-area: center; display: flex; flex-direction: column; }
+.hud-right { grid-area: right; overflow-y: auto; overflow-x: hidden; }
 .hud-footer { grid-area: footer; padding: 0.5rem 1rem; }
 
-/* Barre de défilement personnalisée pour les panneaux */
-.hud-left::-webkit-scrollbar,
-.hud-right::-webkit-scrollbar {
-  width: 4px;
-}
+.hud-left::-webkit-scrollbar, .hud-right::-webkit-scrollbar { width: 4px; }
+.hud-left::-webkit-scrollbar-track, .hud-right::-webkit-scrollbar-track { background: rgba(0,255,106,0.05); }
+.hud-left::-webkit-scrollbar-thumb, .hud-right::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
-.hud-left::-webkit-scrollbar-track,
-.hud-right::-webkit-scrollbar-track {
-  background: rgba(0, 255, 106, 0.05);
-}
-
-.hud-left::-webkit-scrollbar-thumb,
-.hud-right::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* ============================================
-   4. EN-TÊTE - Logo MG et informations
-   ============================================ */
-
-/* Logo MG dans un cadre */
+/* Logo */
 .hud-logo {
   width: 50px;
   height: 50px;
@@ -226,10 +144,9 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: rgba(0, 255, 106, 0.05);
+  background: rgba(0,255,106,0.05);
 }
 
-/* Texte du logo MG */
 .logo-text {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -239,7 +156,6 @@ body {
   animation: logoPulse 2s ease-in-out infinite;
 }
 
-/* Anneau pulsant autour du logo */
 .logo-pulse {
   position: absolute;
   inset: -4px;
@@ -249,17 +165,10 @@ body {
   animation: logoRing 2s ease-out infinite;
 }
 
-@keyframes logoPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
+@keyframes logoPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@keyframes logoRing { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.3); opacity: 0; } }
 
-@keyframes logoRing {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(1.3); opacity: 0; }
-}
-
-/* Sous-titre "M-GUARD" */
+/* Titres */
 .hud-kicker {
   font-family: var(--font-display);
   font-size: 0.6rem;
@@ -268,7 +177,6 @@ body {
   color: var(--accent);
 }
 
-/* Titre principal */
 .hud-title {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -278,18 +186,15 @@ body {
   text-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Effet de texte glitch */
 .glitch-text {
   position: relative;
   animation: glitchText 3s infinite;
 }
 
-.glitch-text::before,
-.glitch-text::after {
+.glitch-text::before, .glitch-text::after {
   content: attr(data-text);
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0; top: 0;
   opacity: 0.8;
 }
 
@@ -305,100 +210,28 @@ body {
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
 
-@keyframes glitchText {
-  0%, 90%, 100% { transform: translate(0); }
-  92% { transform: translate(-2px, 1px); }
-  94% { transform: translate(2px, -1px); }
-  96% { transform: translate(-1px, 2px); }
-  98% { transform: translate(1px, -2px); }
-}
+@keyframes glitchText { 0%, 90%, 100% { transform: translate(0); } 92% { transform: translate(-2px, 1px); } 94% { transform: translate(2px, -1px); } }
+@keyframes glitchBefore { 0%, 90%, 100% { transform: translate(0); } 92% { transform: translate(3px, 0); } 94% { transform: translate(-3px, 0); } }
+@keyframes glitchAfter { 0%, 90%, 100% { transform: translate(0); } 92% { transform: translate(-3px, 0); } 94% { transform: translate(3px, 0); } }
 
-@keyframes glitchBefore {
-  0%, 90%, 100% { transform: translate(0); }
-  92% { transform: translate(3px, 0); }
-  94% { transform: translate(-3px, 0); }
-  96% { transform: translate(2px, 0); }
-  98% { transform: translate(-2px, 0); }
-}
-
-@keyframes glitchAfter {
-  0%, 90%, 100% { transform: translate(0); }
-  92% { transform: translate(-3px, 0); }
-  94% { transform: translate(3px, 0); }
-  96% { transform: translate(-2px, 0); }
-  98% { transform: translate(2px, 0); }
-}
-
-/* Barres de signal animées */
-.signal-bars {
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  height: 24px;
-}
-
-.signal-bar {
-  width: 4px;
-  background: var(--accent);
-  border-radius: 2px;
-  animation: signalPulse 1.5s ease-in-out infinite;
-}
-
-/* Hauteurs progressives des barres */
+/* Signal */
+.signal-bars { display: flex; gap: 3px; align-items: flex-end; height: 24px; }
+.signal-bar { width: 4px; background: var(--accent); border-radius: 2px; animation: signalPulse 1.5s ease-in-out infinite; }
 .signal-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
 .signal-bar:nth-child(2) { height: 10px; animation-delay: 0.1s; }
 .signal-bar:nth-child(3) { height: 14px; animation-delay: 0.2s; }
 .signal-bar:nth-child(4) { height: 18px; animation-delay: 0.3s; }
 .signal-bar:nth-child(5) { height: 22px; animation-delay: 0.4s; }
+@keyframes signalPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-@keyframes signalPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-/* Texte petit pour les infos */
-.hud-small {
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-/* Chiffres monospace */
-.mono-digits {
-  font-family: var(--font-mono);
-  color: var(--accent);
-  letter-spacing: 0.15em;
-}
-
-/* Texte rouge danger */
-.text-accent-danger {
-  color: var(--accent-danger);
-}
-
-/* Texte pulsant */
-.pulse-text {
-  animation: pulseText 1s ease-in-out infinite;
-}
-
-@keyframes pulseText {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* Clignotement lent */
-.blink-slow {
-  animation: blinkSlow 2s step-end infinite;
-}
-
-@keyframes blinkSlow {
-  0%, 50% { opacity: 1; }
-  50.1%, 100% { opacity: 0; }
-}
-
-/* ============================================
-   5. TITRES DE SECTION
-   ============================================ */
+/* Textes */
+.hud-small { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); }
+.mono-digits { font-family: var(--font-mono); color: var(--accent); letter-spacing: 0.15em; }
+.text-accent-danger { color: var(--accent-danger); }
+.pulse-text { animation: pulseText 1s ease-in-out infinite; }
+@keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.blink-slow { animation: blinkSlow 2s step-end infinite; }
+@keyframes blinkSlow { 0%, 50% { opacity: 1; } 50.1%, 100% { opacity: 0; } }
 
 .hud-section-title {
   font-family: var(--font-display);
@@ -412,10 +245,7 @@ body {
   align-items: center;
   text-shadow: 0 0 10px var(--accent-glow);
 }
-
-.hud-section-title i {
-  font-size: 0.8rem;
-}
+.hud-section-title i { font-size: 0.8rem; }
 
 .hud-subsection-title {
   font-family: var(--font-mono);
@@ -427,24 +257,18 @@ body {
   align-items: center;
 }
 
-/* ============================================
-   6. LISTE DES CAMÉRAS
-   ============================================ */
-
+/* Caméras */
 .hud-cam-list {
   border: 1px solid var(--border-panel);
   border-radius: 10px;
   padding: 0.4rem;
-  background: 
-    radial-gradient(ellipse at top, rgba(0, 255, 106, 0.03) 0%, transparent 60%),
-    linear-gradient(180deg, #07120c 0%, #030504 100%);
+  background: radial-gradient(ellipse at top, rgba(0,255,106,0.03) 0%, transparent 60%), linear-gradient(180deg, #07120c 0%, #030504 100%);
 }
 
-/* Bouton de caméra */
 .cam-btn {
   background: transparent;
   color: var(--text-main);
-  border: 1px solid rgba(0, 255, 106, 0.2);
+  border: 1px solid rgba(0,255,106,0.2);
   border-radius: 6px;
   padding: 0.4rem 0.6rem;
   font-size: 0.65rem;
@@ -458,320 +282,91 @@ body {
   position: relative;
   cursor: pointer;
 }
+.cam-btn:last-child { margin-bottom: 0; }
+.cam-btn i { color: var(--accent-soft); transition: color 0.2s; }
 
-.cam-btn:last-child {
-  margin-bottom: 0;
-}
+.cam-status { width: 6px; height: 6px; border-radius: 50%; margin-right: 8px; }
+.cam-status.online { background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: statusPulse 2s ease-in-out infinite; }
+.cam-status.warning { background: var(--accent-warning); box-shadow: 0 0 8px var(--accent-warning); animation: statusPulse 1s ease-in-out infinite; }
+.cam-status.offline { background: var(--accent-danger); box-shadow: 0 0 8px var(--accent-danger); animation: statusBlink 0.5s step-end infinite; }
+@keyframes statusPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+@keyframes statusBlink { 0%, 50% { opacity: 1; } 50.1%, 100% { opacity: 0.3; } }
 
-.cam-btn i {
-  color: var(--accent-soft);
-  transition: color 0.2s;
-}
+.cam-location { margin-left: auto; font-size: 0.55rem; color: var(--text-secondary); opacity: 0.7; }
+.cam-btn:hover { background: rgba(0,255,106,0.1); border-color: rgba(0,255,106,0.4); transform: translateX(4px); box-shadow: 0 0 15px rgba(0,255,106,0.2); }
+.cam-btn:hover i { color: var(--accent); }
+.cam-btn.active { background: rgba(0,255,106,0.15); border-color: var(--accent); box-shadow: 0 0 20px rgba(0,255,106,0.3), inset 0 0 20px rgba(0,255,106,0.05); }
+.cam-btn.active::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: var(--accent); border-radius: 0 2px 2px 0; box-shadow: 0 0 10px var(--accent); }
 
-/* Indicateur de statut de la caméra */
-.cam-status {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-/* Statut en ligne - vert */
-.cam-status.online {
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-  animation: statusPulse 2s ease-in-out infinite;
-}
-
-/* Statut avertissement - orange */
-.cam-status.warning {
-  background: var(--accent-warning);
-  box-shadow: 0 0 8px var(--accent-warning);
-  animation: statusPulse 1s ease-in-out infinite;
-}
-
-/* Statut hors ligne - rouge */
-.cam-status.offline {
-  background: var(--accent-danger);
-  box-shadow: 0 0 8px var(--accent-danger);
-  animation: statusBlink 0.5s step-end infinite;
-}
-
-@keyframes statusPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-@keyframes statusBlink {
-  0%, 50% { opacity: 1; }
-  50.1%, 100% { opacity: 0.3; }
-}
-
-/* Nom de la localisation */
-.cam-location {
-  margin-left: auto;
-  font-size: 0.55rem;
-  color: var(--text-secondary);
-  opacity: 0.7;
-}
-
-/* Survol du bouton caméra */
-.cam-btn:hover {
-  background: rgba(0, 255, 106, 0.1);
-  border-color: rgba(0, 255, 106, 0.4);
-  transform: translateX(4px);
-  box-shadow: 0 0 15px rgba(0, 255, 106, 0.2);
-}
-
-.cam-btn:hover i {
-  color: var(--accent);
-}
-
-/* Bouton caméra actif */
-.cam-btn.active {
-  background: rgba(0, 255, 106, 0.15);
-  border-color: var(--accent);
-  box-shadow: 
-    0 0 20px rgba(0, 255, 106, 0.3),
-    inset 0 0 20px rgba(0, 255, 106, 0.05);
-}
-
-/* Barre latérale pour le bouton actif */
-.cam-btn.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 60%;
-  background: var(--accent);
-  border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 10px var(--accent);
-}
-
-/* ============================================
-   7. GRAPHIQUE D'ACTIVITÉ
-   ============================================ */
-
+/* Graphique */
 .hud-chart-wrapper {
   border-radius: 10px;
   border: 1px solid var(--border-panel);
   padding: 0.4rem;
-  background: 
-    radial-gradient(ellipse at top, rgba(0, 255, 106, 0.02) 0%, transparent 70%),
-    linear-gradient(180deg, #050f09 0%, #020403 100%);
+  background: radial-gradient(ellipse at top, rgba(0,255,106,0.02) 0%, transparent 70%), linear-gradient(180deg, #050f09 0%, #020403 100%);
   position: relative;
   overflow: hidden;
   height: 100px;
 }
-
-/* Grille de fond du graphique */
 .hud-chart-wrapper::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: 
-    linear-gradient(to right, rgba(0, 255, 106, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 255, 106, 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(0,255,106,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,255,106,0.05) 1px, transparent 1px);
   background-size: 20px 20px;
   opacity: 0.5;
 }
 
-/* ============================================
-   8. SECTION DOSSIER AVEC EMPREINTE À GAUCHE
-   ============================================ */
-
+/* Dossier */
 .hud-dossier-container {
   position: relative;
   border-radius: 10px;
-  border: 1px dashed rgba(0, 255, 106, 0.4);
+  border: 1px dashed rgba(0,255,106,0.4);
   background: linear-gradient(135deg, #040b08 0%, #020403 100%);
   overflow: hidden;
   min-height: 80px;
 }
 
-/* Empreinte digitale positionnée À GAUCHE */
-.fingerprint-bg {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 70px;
-  height: 70px;
-  opacity: 0.6;
-  pointer-events: none;
-}
+.fingerprint-bg { position: absolute; top: 50%; transform: translateY(-50%); width: 70px; height: 70px; opacity: 0.6; pointer-events: none; }
+.fingerprint-bg.fingerprint-left { left: 8px; right: auto; }
+.fingerprint-svg { width: 100%; height: 100%; }
+.fp-ring { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 8 4; animation: fpRotate 20s linear infinite; transform-origin: center; }
+.fp-ring:nth-child(odd) { animation-direction: reverse; }
+@keyframes fpRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-/* Classe spécifique pour positionner à gauche */
-.fingerprint-bg.fingerprint-left {
-  left: 8px;
-  right: auto;
-}
+.scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scanDown 3s ease-in-out infinite; }
+@keyframes scanDown { 0%, 100% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
-.fingerprint-svg {
-  width: 100%;
-  height: 100%;
-}
+.hud-dossier { padding: 0.6rem 0.6rem 0.6rem 85px; font-size: 0.6rem; line-height: 1.4; color: var(--accent-soft); position: relative; z-index: 1; min-height: 60px; }
 
-/* Cercles de l'empreinte digitale */
-.fp-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.5;
-  stroke-dasharray: 8 4;
-  animation: fpRotate 20s linear infinite;
-  transform-origin: center;
-}
+.dossier-classification { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0.6rem; background: rgba(255,34,87,0.1); border-top: 1px solid rgba(255,34,87,0.3); }
+.classification-badge { font-size: 0.5rem; font-weight: 600; letter-spacing: 0.1em; color: var(--accent-danger); background: rgba(255,34,87,0.2); padding: 0.1rem 0.3rem; border-radius: 3px; animation: classificationPulse 2s ease-in-out infinite; }
+@keyframes classificationPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+.classification-code { font-size: 0.45rem; color: rgba(255,34,87,0.7); letter-spacing: 0.05em; }
 
-/* Rotation alternée des cercles */
-.fp-ring:nth-child(odd) {
-  animation-direction: reverse;
-}
+/* GPS */
+.hud-gps { padding: 0.5rem 0.6rem; border-radius: 8px; border: 1px solid rgba(0,255,106,0.3); background: linear-gradient(135deg, #030504 0%, #020304 100%); }
+.gps-row { display: flex; align-items: center; margin-bottom: 0.2rem; }
+.gps-row:last-of-type { margin-bottom: 0.3rem; }
+.gps-label { font-size: 0.55rem; color: var(--text-secondary); width: 35px; letter-spacing: 0.1em; }
+.gps-value { font-size: 0.65rem; color: var(--accent); font-family: var(--font-mono); letter-spacing: 0.08em; }
+.gps-accuracy { font-size: 0.5rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem; padding-top: 0.25rem; border-top: 1px dashed rgba(0,255,106,0.2); }
+.accuracy-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: accuracyPulse 1.5s ease-in-out infinite; }
+@keyframes accuracyPulse { 0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--accent); } 50% { opacity: 0.5; box-shadow: 0 0 8px var(--accent); } }
 
-@keyframes fpRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Ligne de scan verticale */
-.scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  animation: scanDown 3s ease-in-out infinite;
-}
-
-@keyframes scanDown {
-  0%, 100% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-/* Contenu du dossier - décalé pour l'empreinte */
-.hud-dossier {
-  padding: 0.6rem 0.6rem 0.6rem 85px; /* Espace à gauche pour l'empreinte */
-  font-size: 0.6rem;
-  line-height: 1.4;
-  color: var(--accent-soft);
-  position: relative;
-  z-index: 1;
-  min-height: 60px;
-}
-
-/* Badge de classification */
-.dossier-classification {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.3rem 0.6rem;
-  background: rgba(255, 34, 87, 0.1);
-  border-top: 1px solid rgba(255, 34, 87, 0.3);
-}
-
-.classification-badge {
-  font-size: 0.5rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--accent-danger);
-  background: rgba(255, 34, 87, 0.2);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  animation: classificationPulse 2s ease-in-out infinite;
-}
-
-@keyframes classificationPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.classification-code {
-  font-size: 0.45rem;
-  color: rgba(255, 34, 87, 0.7);
-  letter-spacing: 0.05em;
-}
-
-/* ============================================
-   9. COORDONNÉES GPS
-   ============================================ */
-
-.hud-gps {
-  padding: 0.5rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 255, 106, 0.3);
-  background: linear-gradient(135deg, #030504 0%, #020304 100%);
-}
-
-.gps-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.2rem;
-}
-
-.gps-row:last-of-type {
-  margin-bottom: 0.3rem;
-}
-
-.gps-label {
-  font-size: 0.55rem;
-  color: var(--text-secondary);
-  width: 35px;
-  letter-spacing: 0.1em;
-}
-
-.gps-value {
-  font-size: 0.65rem;
-  color: var(--accent);
-  font-family: var(--font-mono);
-  letter-spacing: 0.08em;
-}
-
-.gps-accuracy {
-  font-size: 0.5rem;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding-top: 0.25rem;
-  border-top: 1px dashed rgba(0, 255, 106, 0.2);
-}
-
-.accuracy-dot {
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: accuracyPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes accuracyPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--accent); }
-  50% { opacity: 0.5; box-shadow: 0 0 8px var(--accent); }
-}
-
-/* ============================================
-   10. FLUX VIDÉO EN DIRECT
-   ============================================ */
-
+/* Flux vidéo */
 .hud-camera-feed {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
   background: #000;
-  border: 2px solid rgba(0, 255, 106, 0.4);
-  box-shadow: 
-    0 0 30px rgba(0, 255, 106, 0.2),
-    inset 0 0 60px rgba(0, 0, 0, 0.5);
-  /* Ratio 16:9 adaptatif */
+  border: 2px solid rgba(0,255,106,0.4);
+  box-shadow: 0 0 30px rgba(0,255,106,0.2), inset 0 0 60px rgba(0,0,0,0.5);
   flex: 1;
   min-height: 200px;
 }
 
-/* Vidéo avec filtres */
 .hud-camera-feed video {
   display: block;
   width: 100%;
@@ -781,18 +376,14 @@ body {
   transition: filter 0.3s ease;
 }
 
-/* Contrôles de filtre vidéo */
-.feed-controls {
-  display: flex;
-  gap: 0.4rem;
-}
+.feed-controls { display: flex; gap: 0.4rem; }
 
 .feed-btn {
   width: 26px;
   height: 26px;
   border-radius: 6px;
-  border: 1px solid rgba(0, 255, 106, 0.3);
-  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0,255,106,0.3);
+  background: rgba(0,0,0,0.5);
   color: var(--text-secondary);
   display: flex;
   align-items: center;
@@ -802,52 +393,31 @@ body {
   font-size: 0.7rem;
 }
 
-.feed-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(0, 255, 106, 0.1);
-}
+.feed-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,255,106,0.1); }
+.feed-btn.active { border-color: var(--accent); background: rgba(0,255,106,0.2); color: var(--accent); box-shadow: 0 0 10px rgba(0,255,106,0.3); }
 
-.feed-btn.active {
-  border-color: var(--accent);
-  background: rgba(0, 255, 106, 0.2);
-  color: var(--accent);
-  box-shadow: 0 0 10px rgba(0, 255, 106, 0.3);
-}
-
-/* Animation de glitch vidéo */
 @keyframes camGlitch {
-  0%   { transform: translate(0, 0) skewX(0); }
-  20%  { transform: translate(-3px, 2px) skewX(-1deg); }
-  40%  { transform: translate(3px, -2px) skewX(1deg); }
-  60%  { transform: translate(-2px, 3px) skewX(-0.5deg); }
-  80%  { transform: translate(2px, -3px) skewX(0.5deg); }
+  0% { transform: translate(0, 0) skewX(0); }
+  20% { transform: translate(-3px, 2px) skewX(-1deg); }
+  40% { transform: translate(3px, -2px) skewX(1deg); }
+  60% { transform: translate(-2px, 3px) skewX(-0.5deg); }
+  80% { transform: translate(2px, -3px) skewX(0.5deg); }
   100% { transform: translate(0, 0) skewX(0); }
 }
 
-.hud-camera-feed.glitch video {
-  animation: camGlitch 0.2s linear 1;
-  filter: grayscale(1) contrast(2) brightness(0.5) saturate(2);
-}
+.hud-camera-feed.glitch video { animation: camGlitch 0.2s linear 1; filter: grayscale(1) contrast(2) brightness(0.5) saturate(2); }
+.hud-camera-feed.glitch::after { opacity: 0.4 !important; }
 
-.hud-camera-feed.glitch::after {
-  opacity: 0.4 !important;
-}
-
-/* Lignes de balayage CRT sur la vidéo */
 .hud-camera-feed::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: 
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 1px, transparent 2px),
-    linear-gradient(to bottom, transparent 50%, rgba(0, 255, 106, 0.03) 50%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 1px, transparent 2px), linear-gradient(to bottom, transparent 50%, rgba(0,255,106,0.03) 50%);
   background-size: 100% 3px, 100% 4px;
   pointer-events: none;
   z-index: 10;
 }
 
-/* Grain sur la vidéo */
 .hud-camera-feed::after {
   content: "";
   position: absolute;
@@ -859,209 +429,55 @@ body {
   animation: noiseAnim 0.3s steps(8) infinite;
 }
 
-/* Crochets aux coins du cadre vidéo */
-.corner-bracket {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  border-color: var(--accent);
-  border-style: solid;
-  border-width: 0;
-  z-index: 15;
-  opacity: 0.8;
-}
+/* Crochets */
+.corner-bracket { position: absolute; width: 25px; height: 25px; border-color: var(--accent); border-style: solid; border-width: 0; z-index: 15; opacity: 0.8; }
+.corner-bracket.top-left { top: 8px; left: 8px; border-top-width: 2px; border-left-width: 2px; }
+.corner-bracket.top-right { top: 8px; right: 8px; border-top-width: 2px; border-right-width: 2px; }
+.corner-bracket.bottom-left { bottom: 35px; left: 8px; border-bottom-width: 2px; border-left-width: 2px; }
+.corner-bracket.bottom-right { bottom: 35px; right: 8px; border-bottom-width: 2px; border-right-width: 2px; }
 
-.corner-bracket.top-left {
-  top: 8px;
-  left: 8px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
+/* Réticule */
+.camera-crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; pointer-events: none; z-index: 12; opacity: 0.4; }
+.crosshair-h, .crosshair-v { position: absolute; background: var(--accent); }
+.crosshair-h { width: 100%; height: 1px; top: 50%; }
+.crosshair-v { width: 1px; height: 100%; left: 50%; }
+.crosshair-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border: 1px solid var(--accent); border-radius: 50%; }
 
-.corner-bracket.top-right {
-  top: 8px;
-  right: 8px;
-  border-top-width: 2px;
-  border-right-width: 2px;
-}
+/* Overlays */
+.hud-overlay { position: absolute; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); z-index: 20; }
+.hud-rec { top: 10px; right: 12px; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.rec-dot { width: 8px; height: 8px; background: var(--accent-danger); border-radius: 50%; animation: recBlink 1s step-end infinite; box-shadow: 0 0 8px var(--accent-danger); }
+@keyframes recBlink { 0%, 50% { opacity: 1; } 50.1%, 100% { opacity: 0; } }
+.hud-cam-label { bottom: 35px; right: 12px; font-size: 0.8rem; font-weight: 600; }
+.hud-timestamp { top: 10px; left: 12px; font-size: 0.6rem; color: var(--accent-soft); }
+.hud-status { bottom: 10px; left: 12px; right: 12px; display: flex; gap: 1.2rem; font-size: 0.55rem; color: var(--text-secondary); }
+.status-item { display: flex; align-items: center; gap: 0.3rem; }
+.status-item i { font-size: 0.65rem; color: var(--accent-soft); }
 
-.corner-bracket.bottom-left {
-  bottom: 35px;
-  left: 8px;
-  border-bottom-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-bracket.bottom-right {
-  bottom: 35px;
-  right: 8px;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
-}
-
-/* Réticule de visée central */
-.camera-crosshair {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
-  pointer-events: none;
-  z-index: 12;
-  opacity: 0.4;
-}
-
-.crosshair-h,
-.crosshair-v {
-  position: absolute;
-  background: var(--accent);
-}
-
-.crosshair-h {
-  width: 100%;
-  height: 1px;
-  top: 50%;
-}
-
-.crosshair-v {
-  width: 1px;
-  height: 100%;
-  left: 50%;
-}
-
-.crosshair-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-}
-
-/* Superpositions d'information sur la vidéo */
-.hud-overlay {
-  position: absolute;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  text-shadow: 0 0 10px var(--accent-glow);
-  z-index: 20;
-}
-
-/* Indicateur REC */
-.hud-rec {
-  top: 10px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-}
-
-.rec-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-danger);
-  border-radius: 50%;
-  animation: recBlink 1s step-end infinite;
-  box-shadow: 0 0 8px var(--accent-danger);
-}
-
-@keyframes recBlink {
-  0%, 50% { opacity: 1; }
-  50.1%, 100% { opacity: 0; }
-}
-
-/* Label de caméra */
-.hud-cam-label {
-  bottom: 35px;
-  right: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* Horodatage */
-.hud-timestamp {
-  top: 10px;
-  left: 12px;
-  font-size: 0.6rem;
-  color: var(--accent-soft);
-}
-
-/* Barre de statut en bas */
-.hud-status {
-  bottom: 10px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  gap: 1.2rem;
-  font-size: 0.55rem;
-  color: var(--text-secondary);
-}
-
-.status-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.status-item i {
-  font-size: 0.65rem;
-  color: var(--accent-soft);
-}
-
-/* ============================================
-   11. CARTES DES CIBLES - PLUS GRANDES
-   ============================================ */
-
+/* Cibles */
 .hud-targets {
   display: flex;
-  gap: 0.6rem;
-  overflow-x: auto;
+  gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 10px;
-  border: 1px solid rgba(0, 255, 106, 0.2);
+  border: 1px solid rgba(0,255,106,0.2);
   background: linear-gradient(135deg, #050f09 0%, #020304 100%);
-  /* Hauteur fixe pour les cartes plus grandes */
-  min-height: 160px;
 }
 
-/* Masquer la barre de défilement mais garder la fonctionnalité */
-.hud-targets::-webkit-scrollbar {
-  height: 4px;
-}
-
-.hud-targets::-webkit-scrollbar-track {
-  background: rgba(0, 255, 106, 0.1);
-  border-radius: 2px;
-}
-
-.hud-targets::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* Carte de cible individuelle - AGRANDIE */
 .target-card {
-  flex: 0 0 auto;
-  width: 160px; /* Plus large */
-  padding: 0.6rem;
+  flex: 1;
+  padding: 0.5rem;
   border-radius: 10px;
-  border: 1px solid rgba(0, 255, 106, 0.2);
-  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0,255,106,0.2);
+  background: rgba(0,0,0,0.5);
   cursor: pointer;
   opacity: 0.6;
-  transform: scale(0.95);
+  transform: scale(0.98);
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
-/* Effet de survol avec lumière */
 .target-card::before {
   content: "";
   position: absolute;
@@ -1069,177 +485,61 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 106, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,255,106,0.1), transparent);
   transition: left 0.4s ease;
 }
+.target-card:hover::before { left: 100%; }
+.target-card:hover { opacity: 0.85; border-color: rgba(0,255,106,0.4); transform: scale(0.98); box-shadow: 0 0 15px rgba(0,255,106,0.2); }
+.target-card.active { opacity: 1; transform: scale(1); border-color: var(--accent); background: rgba(0,255,106,0.05); box-shadow: 0 0 25px rgba(0,255,106,0.3), inset 0 0 30px rgba(0,255,106,0.05); }
 
-.target-card:hover::before {
-  left: 100%;
-}
-
-.target-card:hover {
-  opacity: 0.85;
-  border-color: rgba(0, 255, 106, 0.4);
-  transform: scale(0.98);
-  box-shadow: 0 0 15px rgba(0, 255, 106, 0.2);
-}
-
-/* Carte active */
-.target-card.active {
-  opacity: 1;
-  transform: scale(1);
-  border-color: var(--accent);
-  background: rgba(0, 255, 106, 0.05);
-  box-shadow: 
-    0 0 25px rgba(0, 255, 106, 0.3),
-    inset 0 0 30px rgba(0, 255, 106, 0.05);
-}
-
-/* Photo de la cible - PLUS GRANDE */
 .target-photo {
   width: 100%;
-  height: 90px; /* Plus haute */
+  height: 90px;
   border-radius: 8px;
   background-size: cover;
   background-position: center;
-  border: 1px solid rgba(0, 255, 106, 0.4);
+  border: 1px solid rgba(0,255,106,0.4);
   position: relative;
   overflow: hidden;
   margin-bottom: 0.5rem;
 }
 
-/* Ligne de scan sur la photo */
-.target-scan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  animation: targetScan 2s linear infinite;
-  opacity: 0;
-}
+.target-scan { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: targetScan 2s linear infinite; opacity: 0; }
+.target-card.active .target-scan { opacity: 1; }
+@keyframes targetScan { 0% { top: 0; } 100% { top: 100%; } }
 
-.target-card.active .target-scan {
-  opacity: 1;
-}
+.target-meta { text-align: center; }
+.target-code { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent); margin: 0 0 0.3rem; }
+.target-label { font-size: 0.6rem; color: var(--text-secondary); margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
-@keyframes targetScan {
-  0% { top: 0; }
-  100% { top: 100%; }
-}
+.risk-badge { font-size: 0.5rem; padding: 0.15rem 0.4rem; border-radius: 3px; font-weight: 600; letter-spacing: 0.05em; }
+.risk-badge.low { background: rgba(0,255,106,0.2); color: var(--accent); }
+.risk-badge.medium { background: rgba(255,170,0,0.2); color: var(--accent-warning); }
+.risk-badge.high { background: rgba(255,34,87,0.2); color: var(--accent-danger); }
+.risk-badge.critical { background: rgba(255,34,87,0.4); color: #fff; animation: criticalPulse 0.5s ease-in-out infinite; }
+.risk-badge.unknown { background: rgba(170,0,255,0.2); color: var(--accent-unknown); }
+@keyframes criticalPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-/* Métadonnées de la cible */
-.target-meta {
-  text-align: center;
-}
+.target-threat-level { margin-top: 0.5rem; height: 4px; background: rgba(0,255,106,0.1); border-radius: 2px; overflow: hidden; }
+.threat-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-warning)); border-radius: 2px; animation: threatPulse 2s ease-in-out infinite; }
+.threat-bar.critical { background: linear-gradient(90deg, var(--accent-warning), var(--accent-danger)); animation: threatPulse 1s ease-in-out infinite; }
+.threat-bar.unknown { background: linear-gradient(90deg, var(--accent-unknown), #5500aa); animation: threatUnknown 1.5s ease-in-out infinite; }
+@keyframes threatPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@keyframes threatUnknown { 0%, 100% { opacity: 0.8; filter: hue-rotate(0deg); } 50% { opacity: 0.4; filter: hue-rotate(20deg); } }
 
-.target-code {
-  font-family: var(--font-display);
-  font-size: 0.75rem; /* Plus grand */
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  margin: 0 0 0.3rem;
-}
-
-.target-label {
-  font-size: 0.6rem;
-  color: var(--text-secondary);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-}
-
-/* Badges de risque */
-.risk-badge {
-  font-size: 0.5rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 3px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-.risk-badge.low { background: rgba(0, 255, 106, 0.2); color: var(--accent); }
-.risk-badge.medium { background: rgba(255, 170, 0, 0.2); color: var(--accent-warning); }
-.risk-badge.high { background: rgba(255, 34, 87, 0.2); color: var(--accent-danger); }
-.risk-badge.critical { 
-  background: rgba(255, 34, 87, 0.4); 
-  color: #fff; 
-  animation: criticalPulse 0.5s ease-in-out infinite; 
-}
-.risk-badge.unknown { background: rgba(170, 0, 255, 0.2); color: var(--accent-unknown); }
-
-@keyframes criticalPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Barre de niveau de menace */
-.target-threat-level {
-  margin-top: 0.5rem;
-  height: 4px;
-  background: rgba(0, 255, 106, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.threat-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-warning));
-  border-radius: 2px;
-  animation: threatPulse 2s ease-in-out infinite;
-}
-
-.threat-bar.critical {
-  background: linear-gradient(90deg, var(--accent-warning), var(--accent-danger));
-  animation: threatPulse 1s ease-in-out infinite;
-}
-
-.threat-bar.unknown {
-  background: linear-gradient(90deg, var(--accent-unknown), #5500aa);
-  animation: threatUnknown 1.5s ease-in-out infinite;
-}
-
-@keyframes threatPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-@keyframes threatUnknown {
-  0%, 100% { opacity: 0.8; filter: hue-rotate(0deg); }
-  50% { opacity: 0.4; filter: hue-rotate(20deg); }
-}
-
-/* ============================================
-   12. CARTE GÉOGRAPHIQUE
-   ============================================ */
-
+/* Carte */
 .hud-map {
   width: 100%;
   height: 140px;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(0, 255, 106, 0.35);
+  border: 1px solid rgba(0,255,106,0.35);
   position: relative;
   background: radial-gradient(circle at center, #052814 0%, #000 70%);
 }
 
-/* Filtres sur le canvas de la carte */
-#map canvas {
-  filter:
-    grayscale(1)
-    invert(1)
-    contrast(2)
-    brightness(0.4)
-    hue-rotate(100deg)
-    saturate(2.5);
-  mix-blend-mode: screen;
-}
+#map canvas { filter: grayscale(1) invert(1) contrast(2) brightness(0.4) hue-rotate(100deg) saturate(2.5); mix-blend-mode: screen; }
 
-/* Superposition radar */
 .hud-map::before {
   content: "";
   position: absolute;
@@ -1247,22 +547,11 @@ body {
   pointer-events: none;
   z-index: 5;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at center, rgba(0, 255, 106, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at center, transparent 23%, rgba(0, 255, 106, 0.15) 24%, transparent 25%),
-    radial-gradient(circle at center, transparent 43%, rgba(0, 255, 106, 0.12) 44%, transparent 45%),
-    linear-gradient(to right, rgba(0, 255, 106, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 255, 106, 0.1) 1px, transparent 1px);
-  background-size:
-    100% 100%,
-    100% 100%,
-    100% 100%,
-    25px 25px,
-    25px 25px;
+  background: radial-gradient(circle at center, rgba(0,255,106,0.2) 0%, transparent 50%), radial-gradient(circle at center, transparent 23%, rgba(0,255,106,0.15) 24%, transparent 25%), radial-gradient(circle at center, transparent 43%, rgba(0,255,106,0.12) 44%, transparent 45%), linear-gradient(to right, rgba(0,255,106,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,255,106,0.1) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 25px 25px, 25px 25px;
   mix-blend-mode: screen;
 }
 
-/* Balayage radar animé */
 .hud-map::after {
   content: "";
   position: absolute;
@@ -1271,42 +560,17 @@ body {
   z-index: 6;
   border-radius: 50%;
   clip-path: circle(50% at 50% 50%);
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(0, 255, 106, 0.6) 2deg,
-    rgba(0, 255, 106, 0.3) 10deg,
-    transparent 30deg,
-    transparent 360deg
-  );
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(0,255,106,0.6) 2deg, rgba(0,255,106,0.3) 10deg, transparent 30deg, transparent 360deg);
   animation: radarSweep 4s linear infinite;
 }
+@keyframes radarSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-@keyframes radarSweep {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.map-coordinates { position: absolute; bottom: 6px; left: 6px; font-size: 0.5rem; color: var(--accent-soft); z-index: 10; background: rgba(0,0,0,0.6); padding: 0.15rem 0.3rem; border-radius: 3px; }
 
-/* Affichage des coordonnées */
-.map-coordinates {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  font-size: 0.5rem;
-  color: var(--accent-soft);
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 0.15rem 0.3rem;
-  border-radius: 3px;
-}
-
-/* ============================================
-   13. LOGS CRYPTÉS
-   ============================================ */
-
+/* Logs */
 .hud-logs {
   border-radius: 10px;
-  border: 1px dashed rgba(0, 255, 106, 0.4);
+  border: 1px dashed rgba(0,255,106,0.4);
   padding: 0.5rem;
   font-size: 0.55rem;
   background: linear-gradient(135deg, #030504 0%, #020304 100%);
@@ -1314,162 +578,36 @@ body {
   max-height: 80px;
   overflow-y: auto;
 }
+.hud-logs::-webkit-scrollbar { width: 3px; }
+.hud-logs::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+.log-line { color: var(--accent-soft); margin-bottom: 0.25rem; opacity: 0.6; display: flex; gap: 0.4rem; }
+.log-line:last-child { margin-bottom: 0; }
+.log-line.new { opacity: 1; animation: logNew 0.5s ease-out; }
+@keyframes logNew { 0% { background: rgba(0,255,106,0.2); } 100% { background: transparent; } }
+.log-time { color: var(--text-secondary); opacity: 0.5; }
 
-.hud-logs::-webkit-scrollbar {
-  width: 3px;
-}
+/* ZDog */
+.hud-zdog-wrapper { display: flex; justify-content: center; position: relative; }
+#zdog-canvas { cursor: grab; }
+#zdog-canvas:active { cursor: grabbing; }
+.zdog-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: radial-gradient(circle, rgba(0,255,106,0.2) 0%, transparent 70%); pointer-events: none; animation: zdogGlow 3s ease-in-out infinite; }
+@keyframes zdogGlow { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); } }
+.country-flag { font-size: 0.9rem; margin-right: 0.3rem; }
 
-.hud-logs::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 2px;
-}
+/* Menace */
+.threat-assessment { padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(0,255,106,0.2); background: linear-gradient(135deg, #040b08 0%, #020403 100%); }
+.threat-meter { height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; position: relative; border: 1px solid rgba(0,255,106,0.2); }
+.threat-fill { height: 100%; width: 60%; background: linear-gradient(90deg, var(--accent), var(--accent-warning), var(--accent-danger)); border-radius: 4px; transition: width 0.5s ease; position: relative; }
+.threat-fill::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); animation: threatShine 1.5s ease-in-out infinite; }
+@keyframes threatShine { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+.threat-markers { display: flex; justify-content: space-between; margin-top: 0.25rem; font-size: 0.45rem; color: var(--text-secondary); }
+.threat-status { text-align: center; font-size: 0.65rem; font-weight: 600; color: var(--accent-warning); margin-top: 0.3rem; letter-spacing: 0.1em; animation: statusFlash 2s ease-in-out infinite; }
+@keyframes statusFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-.log-line {
-  color: var(--accent-soft);
-  margin-bottom: 0.25rem;
-  opacity: 0.6;
-  display: flex;
-  gap: 0.4rem;
-}
-
-.log-line:last-child {
-  margin-bottom: 0;
-}
-
-/* Nouvelle ligne de log */
-.log-line.new {
-  opacity: 1;
-  animation: logNew 0.5s ease-out;
-}
-
-@keyframes logNew {
-  0% { background: rgba(0, 255, 106, 0.2); }
-  100% { background: transparent; }
-}
-
-.log-time {
-  color: var(--text-secondary);
-  opacity: 0.5;
-}
-
-/* ============================================
-   14. EMBLÈME ZDOG 3D
-   ============================================ */
-
-.hud-zdog-wrapper {
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-#zdog-canvas {
-  cursor: grab;
-}
-
-#zdog-canvas:active {
-  cursor: grabbing;
-}
-
-/* Lueur derrière l'emblème */
-.zdog-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, rgba(0, 255, 106, 0.2) 0%, transparent 70%);
-  pointer-events: none;
-  animation: zdogGlow 3s ease-in-out infinite;
-}
-
-@keyframes zdogGlow {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
-}
-
-/* Drapeau du pays */
-.country-flag {
-  font-size: 0.9rem;
-  margin-right: 0.3rem;
-}
-
-/* ============================================
-   15. ÉVALUATION DE LA MENACE
-   ============================================ */
-
-.threat-assessment {
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 255, 106, 0.2);
-  background: linear-gradient(135deg, #040b08 0%, #020403 100%);
-}
-
-.threat-meter {
-  height: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
-  border: 1px solid rgba(0, 255, 106, 0.2);
-}
-
-.threat-fill {
-  height: 100%;
-  width: 60%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-warning), var(--accent-danger));
-  border-radius: 4px;
-  transition: width 0.5s ease;
-  position: relative;
-}
-
-/* Effet de brillance sur la barre */
-.threat-fill::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 20px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
-  animation: threatShine 1.5s ease-in-out infinite;
-}
-
-@keyframes threatShine {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-.threat-markers {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.25rem;
-  font-size: 0.45rem;
-  color: var(--text-secondary);
-}
-
-.threat-status {
-  text-align: center;
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--accent-warning);
-  margin-top: 0.3rem;
-  letter-spacing: 0.1em;
-  animation: statusFlash 2s ease-in-out infinite;
-}
-
-@keyframes statusFlash {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-/* ============================================
-   16. BOUTONS DU PIED DE PAGE
-   ============================================ */
-
+/* Boutons footer */
 .hud-btn {
-  background: rgba(0, 255, 106, 0.05);
-  border: 1px solid rgba(0, 255, 106, 0.4);
+  background: rgba(0,255,106,0.05);
+  border: 1px solid rgba(0,255,106,0.4);
   border-radius: 8px;
   padding: 0.4rem 0.8rem;
   font-size: 0.65rem;
@@ -1484,214 +622,39 @@ body {
   display: flex;
   align-items: center;
 }
+.hud-btn::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,255,106,0.2), transparent); transition: left 0.4s ease; }
+.hud-btn:hover::before { left: 100%; }
+.hud-btn:hover { border-color: var(--accent); box-shadow: 0 0 20px rgba(0,255,106,0.3), inset 0 0 20px rgba(0,255,106,0.05); transform: translateY(-2px); }
+.hud-btn:active { transform: translateY(0); }
+.hud-btn.danger { border-color: rgba(255,34,87,0.4); background: rgba(255,34,87,0.05); }
+.hud-btn.danger:hover { border-color: var(--accent-danger); box-shadow: 0 0 20px rgba(255,34,87,0.3), inset 0 0 20px rgba(255,34,87,0.05); }
+.footer-info .separator { margin: 0 0.4rem; opacity: 0.3; }
+.uplink-status { color: var(--accent); animation: uplinkPulse 2s ease-in-out infinite; }
+@keyframes uplinkPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-/* Effet de lumière au survol */
-.hud-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 106, 0.2), transparent);
-  transition: left 0.4s ease;
-}
+/* Alerte overlay */
+.alert-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.alert-overlay.active { opacity: 1; visibility: visible; }
+.alert-content { text-align: center; padding: 1.5rem 2.5rem; border: 2px solid var(--accent); border-radius: 16px; background: linear-gradient(135deg, #0a1a12 0%, #050908 100%); box-shadow: 0 0 60px rgba(0,255,106,0.3); }
+.alert-icon { font-size: 2.5rem; color: var(--accent-warning); margin-bottom: 0.8rem; animation: alertPulse 1s ease-in-out infinite; }
+@keyframes alertPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.alert-text { font-family: var(--font-display); font-size: 1rem; font-weight: 700; letter-spacing: 0.15em; color: var(--text-main); margin-bottom: 1rem; }
+.alert-progress { width: 180px; height: 4px; background: rgba(0,255,106,0.2); border-radius: 2px; overflow: hidden; margin: 0 auto; }
+.alert-progress-bar { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width 0.1s linear; }
 
-.hud-btn:hover::before {
-  left: 100%;
-}
-
-.hud-btn:hover {
-  border-color: var(--accent);
-  box-shadow: 
-    0 0 20px rgba(0, 255, 106, 0.3),
-    inset 0 0 20px rgba(0, 255, 106, 0.05);
-  transform: translateY(-2px);
-}
-
-.hud-btn:active {
-  transform: translateY(0);
-}
-
-/* Bouton danger (brouilleur) */
-.hud-btn.danger {
-  border-color: rgba(255, 34, 87, 0.4);
-  background: rgba(255, 34, 87, 0.05);
-}
-
-.hud-btn.danger:hover {
-  border-color: var(--accent-danger);
-  box-shadow: 
-    0 0 20px rgba(255, 34, 87, 0.3),
-    inset 0 0 20px rgba(255, 34, 87, 0.05);
-}
-
-/* Infos du pied de page */
-.footer-info .separator {
-  margin: 0 0.4rem;
-  opacity: 0.3;
-}
-
-.uplink-status {
-  color: var(--accent);
-  animation: uplinkPulse 2s ease-in-out infinite;
-}
-
-@keyframes uplinkPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* ============================================
-   17. OVERLAY D'ALERTE
-   ============================================ */
-
-.alert-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.alert-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.alert-content {
-  text-align: center;
-  padding: 1.5rem 2.5rem;
-  border: 2px solid var(--accent);
-  border-radius: 16px;
-  background: linear-gradient(135deg, #0a1a12 0%, #050908 100%);
-  box-shadow: 0 0 60px rgba(0, 255, 106, 0.3);
-}
-
-.alert-icon {
-  font-size: 2.5rem;
-  color: var(--accent-warning);
-  margin-bottom: 0.8rem;
-  animation: alertPulse 1s ease-in-out infinite;
-}
-
-@keyframes alertPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-.alert-text {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: var(--text-main);
-  margin-bottom: 1rem;
-}
-
-.alert-progress {
-  width: 180px;
-  height: 4px;
-  background: rgba(0, 255, 106, 0.2);
-  border-radius: 2px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.alert-progress-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: width 0.1s linear;
-}
-
-/* ============================================
-   18. RESPONSIVE - Adaptation aux écrans
-   ============================================ */
-
-/* Écrans moyens */
+/* Responsive */
 @media (max-width: 1400px) {
-  .hud-grid {
-    grid-template-columns: 1fr 1.8fr 1fr;
-  }
-  
-  .target-card {
-    width: 140px;
-  }
-  
-  .target-photo {
-    height: 75px;
-  }
+  .hud-grid { grid-template-columns: 1fr 1.8fr 1fr; }
 }
 
-/* Tablettes */
 @media (max-width: 1200px) {
-  .hud-grid {
-    grid-template-columns: 1fr 1.5fr;
-    grid-template-rows: auto 1fr 1fr auto;
-    grid-template-areas:
-      "header header"
-      "left center"
-      "right center"
-      "footer footer";
-  }
-  
-  .target-card {
-    width: 120px;
-  }
-  
-  .target-photo {
-    height: 65px;
-  }
+  .hud-grid { grid-template-columns: 1fr 1.5fr; grid-template-rows: auto 1fr 1fr auto; grid-template-areas: "header header" "left center" "right center" "footer footer"; }
 }
 
-/* Petits écrans */
 @media (max-width: 992px) {
-  .hud-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto auto;
-    grid-template-areas:
-      "header"
-      "center"
-      "left"
-      "right"
-      "footer";
-  }
-
-  .hud-wrapper {
-    padding: 0.3rem;
-    height: auto;
-    min-height: 100vh;
-  }
-  
-  body {
-    height: auto;
-    overflow-y: auto;
-  }
-
-  .hud-title {
-    font-size: 0.8rem;
-  }
-
-  .hud-targets {
-    flex-wrap: nowrap;
-  }
-
-  .target-card {
-    width: 110px;
-  }
-  
-  .target-photo {
-    height: 60px;
-  }
-  
-  .hud-camera-feed {
-    min-height: 250px;
-  }
+  .hud-grid { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto auto; grid-template-areas: "header" "center" "left" "right" "footer"; }
+  .hud-wrapper { padding: 0.3rem; height: auto; min-height: 100vh; }
+  body { height: auto; overflow-y: auto; }
+  .hud-title { font-size: 0.8rem; }
+  .hud-camera-feed { min-height: 250px; }
 }
