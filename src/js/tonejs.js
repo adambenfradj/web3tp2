@@ -1,14 +1,3 @@
-// Sons avec Tone.js
-// Liste des sons disponibles:
-// - glitch: Changement de caméra (bruit + notes graves)
-// - sonar: Ping radar automatique toutes les 12 sec
-// - click: Boutons de filtre vidéo
-// - targetLock: Clic sur une carte de cible
-// - switch: Bouton "Changer caméra"
-// - reboot: Bouton "Redémarrer"
-// - lure: Bouton "Leurre audio"
-// - jammer: Bouton "Brouilleur"
-
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof Tone === "undefined") {
     console.log("Tone.js non chargé");
